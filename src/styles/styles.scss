@@ -45,6 +45,34 @@
 
 
 // My Styles
+
+body{
+
+    overflow: auto;
+
+    &::-webkit-scrollbar {
+        width: 8px !important;     /* Tamaño del scroll en vertical */
+        height: 8px !important;    /* Tamaño del scroll en horizontal */
+    }
+
+    &::-webkit-scrollbar-track{
+        background: rgb(102, 102, 102);
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgb(180, 180, 180);
+
+        &:hover {
+            background: #b3b3b3;
+            box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+        }
+    
+        &:active {
+            background-color: #999999;
+        }
+    }
+}
+
 .logo-container{
     justify-content: center;
     position: relative;
@@ -98,34 +126,122 @@
 
     
 }
-
-
-
-.modal-a {
-
-    display:"flex";
-    justify-content:"center";
-    align-items:"center";
-    z-index:1000;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width:100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    }
-
-.modal-content{
-    margin: 0 auto;
-    max-width:500px;
-    min-width:300px;
-    height:auto;
-}
     
 .card {
     box-shadow: 0 0 8px rgb(206, 204, 204);
     &:hover{
         box-shadow: 0 0 8px rgb(141, 141, 141);
     }
+
+}
+
+
+.class-list {
+
+    padding: 0;
+    margin: 0;
+    
+    & > li {
+        font-size: .9rem;
+        list-style: none;
+        padding-bottom: .6rem;
+    }
+}
+
+.course-banner {
+    background: rgb(5, 90, 47);
+}
+
+.class-body{
+    background: rgb(47, 56, 53);
+    height: calc(100vh - 4.5rem);
+
+    @media screen and (max-width:1024px) {
+        height: 100%;
+        
+    }
+
     
 }
+
+.class-container{
+    border-radius: 5px;
+    background: rgb(36, 41, 39);
+    padding: .7rem .7rem 0;
+    height: 32.7rem;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+
+    &::-webkit-scrollbar {
+        width: 8px;     /* Tamaño del scroll en vertical */
+        height: 8px;    /* Tamaño del scroll en horizontal */
+        background: rgb(128, 128, 128);
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgb(180, 180, 180);
+
+        &:hover {
+            background: #b3b3b3;
+            box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+        }
+    
+        &:active {
+            background-color: #999999;
+        }
+    }
+
+    
+   
+}
+
+.class-card{
+    box-shadow: none;
+    background: rgb(45, 58, 54);
+    color: rgb(204, 197, 197);
+    border-radius: 5px !important;
+    margin-bottom: .7rem;
+    
+    &:hover{
+        box-shadow: none;
+    }
+}
+
+.video-info{
+    color: rgb(224, 221, 221);
+}
+
+.class-grid{
+    max-width: 1410px;
+}
+
+.toast{
+    display: none;
+    transition: all .3s ease;
+    z-index: 100;
+    margin: .1rem;
+    
+    &.show{
+        display: block;
+        position: absolute;
+        
+    }
+
+    &.menu{
+        top: 3.5rem;
+        right: 10rem;
+
+    }
+
+
+    &.error{
+        bottom: -1rem;
+        left: .6rem;
+        color: rgb(245, 100, 100);
+    }
+}
+
+.div-link{
+    cursor: pointer;
+}
+

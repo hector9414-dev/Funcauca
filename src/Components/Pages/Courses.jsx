@@ -1,7 +1,12 @@
 import React from 'react'
 import CourseCard from '../Organism/CourseCard'
 
+
 const Courses = () => {
+
+
+
+
     return (
             <div className="ed-grid s-grid-1 m-grid-3 lg-grid-4">
                 <CourseCard img="https://drupal.ed.team/sites/default/files/styles/16_9_medium/public/imagenes-cdn-edteam/2020-02/scrum_normal-v05.png"

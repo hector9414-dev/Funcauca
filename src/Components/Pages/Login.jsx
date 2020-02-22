@@ -1,26 +1,90 @@
-import React from 'react'
-import { Form, Button } from 'react-bootstrap'
+import React, { createRef } from 'react'
+import { Form, Button, Toast, Spinner } from 'react-bootstrap'
+import * as firebase from "firebase/app"
+import "firebase/auth";
+import { useState } from 'react';
+import { connect } from 'react-redux';
+import { addLoggedUser } from '../../Redux/actionCreator';
 
 
-const Login = () => {
+
+const Login = ({addloggeduser}) => {
+
+    const email = createRef()
+    const password = createRef()
+    const [toast, showToast] = useState(false)    
+    const [toastMessage, setToastMessage] = useState(false)    
+    const [toastTitle, setToastTitle] = useState(false) 
+    const [asyncResponse, setasyncResponse] = useState() 
+
+    const login = async e =>{
+        e.preventDefault()
+       
+        const user={
+
+        }
+        setasyncResponse(true)
+        const response = await firebase.auth().signInWithEmailAndPassword(email.current.value, password.current.value).catch(error => {
+            setasyncResponse(false)
+            setToastTitle("Oops, error")
+            setToastMessage(error.message)
+            showToast(true)
+          })
+       
+          if(response){
+              
+              firebase.auth().setPersistence("session")
+              addloggeduser()
+              setasyncResponse(false)
+          }
+
+    }
+
+    
+
     return (
-        <Form className="s-mb-0"> 
+        <>
+       
+        <Form className="s-mb-1">
         <Form.Group controlId="formBasicEmail">
-            <Form.Label>Correo Electronico</Form.Label>
-            <Form.Control type="email" placeholder="Ingresa tu correo" />
+            <Form.Label className="t4">Correo Electronico</Form.Label>
+            <Form.Control required type="email" placeholder="Ingresa tu correo" autoComplete="email" ref={email} />
         </Form.Group>
-        <Form.Group controlId="formBasicPassword" >
-            <Form.Label>Contraseña</Form.Label>
-            <Form.Control type="password" placeholder="Ingresa tu contraseña" className="s-mb-3 s-pr-0" />
+        <Form.Group controlId="formBasicPassword">
+            <Form.Label className="t4">Contraseña</Form.Label>
+            <Form.Control required type="password" placeholder="Ingresa una contraseña" autoComplete="current-password" ref={password}/>
         </Form.Group>
-        <div className="menu-ed-grid ed-grid">
-            <Button variant="primary" type="submit">
+        <div>
+        {
+            asyncResponse ? 
+            <Spinner animation="grow" variant="success" />
+            :
+            
+            <Button variant="primary" type="submit" onClick={ e => {login(e)} }>
                 Ingresar
             </Button>
-            <div className="s-mr-2 small s-main-end s-cross-end" >Aun si cuenta, registrate</div>
+
+        }
+        <Toast show={toast} onClose={()=> showToast(false)} className="error" delay={4000} autohide>
+            <Toast.Header>
+                <strong className="mr-auto">{toastTitle}</strong>
+            </Toast.Header>
+            <Toast.Body>{toastMessage}</Toast.Body>
+        </Toast>
         </div>
         </Form>
+        
+        </>
+
     )
 }
 
-export default Login
+const mapDispatchToProps = dispatch =>({
+    addloggeduser(){
+        dispatch( addLoggedUser() )
+    }
+})
+
+const mapStateToProps = () =>({})
+
+export default connect( mapStateToProps ,mapDispatchToProps)(Login)
