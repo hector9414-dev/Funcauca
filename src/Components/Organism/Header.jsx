@@ -1,16 +1,17 @@
 import React, { createRef, useState } from 'react'
 import Logo from '../Atoms/Logo'
-import { NavLink } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 import { Button, Modal } from 'react-bootstrap'
 import Register from '../Pages/Register'
 import Login from '../Pages/Login'
 import * as firebase from 'firebase/app'
 import { connect } from 'react-redux'
-import { removeLoggedUser } from '../../Redux/actionCreator';
+import { removeLoggedUser, getCourses } from '../../Redux/actionCreator';
+import { useEffect } from 'react'
+import store from '../../Redux/store'
 
 
-
-
+store.dispatch( getCourses() )
 
 const Header = ({loggedUser, removeloggeduser}) => {
 
@@ -18,13 +19,11 @@ const Header = ({loggedUser, removeloggeduser}) => {
     const [showRegister, setShowRegister] = useState(false)
     const [showLogin, setShowLogin] = useState(false)
     const [modal, setModal] = useState()
-    const [registeredOk, showregisteredOk] = useState(false)
+    const [regOk, showregisteredOk] = useState(false)
     const [currentUser, setCurrentUser] = useState(false)
+    
     const menu = createRef()
 
-    
-
-    
     const handleOpenReg = () =>{setShowRegister(true) 
                                 setModal("reg")}
     const handleCloseReg = () =>{setShowRegister(false)
@@ -34,25 +33,21 @@ const Header = ({loggedUser, removeloggeduser}) => {
     
     const toggle = ()=>{menu.current.classList.toggle("show")}
 
-    firebase.auth().onAuthStateChanged( user => {
-        if( loggedUser ){
-            if(user){
-                setCurrentUser(firebase.auth().currentUser.displayName)
-            }
-            handleCloseLogin()
-        }
-    })
-
     const logOut = async () =>{
-        await firebase.auth().signOut()
+        firebase.auth().signOut()
         removeloggeduser()
         setCurrentUser(false)
-        localStorage.removeItem("tokenIdLogged")
-        localStorage.removeItem("userName")
+        localStorage.clear()
     }
 
     
-   
+   useEffect(()=>{
+       if(loggedUser){
+           handleCloseLogin();
+       }
+           
+       
+   },[loggedUser])
     
     
     return (
@@ -78,12 +73,19 @@ const Header = ({loggedUser, removeloggeduser}) => {
                         <div className="menu-login lg-main-end">
                             <ul className="lg-cross-center">
                                 {
-                                    currentUser ?
-                                    <div className="menu-ed-grid ed-grid lg-cross-center t4">
-                                        <div>{`Bienvenido ${currentUser}`}</div>
-                                        <Button onClick={()=>logOut()} className="small ghost">Salir</Button>
+                                    loggedUser ?
+                                    <div className="menu-ed-grid ed-grid lg-cross-center logged-menu">
+                                        <div> 
+                                            <Link to="/dashboard">
+                                            <span className="t5">{loggedUser.name}</span>  
+                                            <img src={loggedUser.img} alt="avatar" className="logged-avatar"/>
+                                            </Link>
+                                        </div>
+                                        <Button onClick={()=>logOut()} className="small ghost logout-button">Salir</Button>
                                     </div>
                                     :
+                                    
+
                                     <>
                                     <li className="s-mb-2">
                                         <div className="lg-mr-2 normal div-link" onClick={() => handleOpenLogin()} >Ingresar</div>
@@ -100,16 +102,41 @@ const Header = ({loggedUser, removeloggeduser}) => {
                                     </li> 
                                     </>
                                 }
-                        
+                                
                                 
                             </ul>
                         </div>
                     </ul>
                 </div>
-                <div className="menu-toggle s-main-end to-l" onClick={()=>toggle()}></div>
+                <div className="toggle-container">
+                {/* FUNCIONALIDAD EN PRUEBAS
+                
+                {  
+                loggedUser?
+                <span className="logged-toggle to-l" onClick={()=>toggle()}>
+                    
+                        {['left'].map(placement => (
+                            <OverlayTrigger
+                            key={placement}
+                            placement={placement}
+                            overlay={
+                                <Tooltip id={`tooltip-${placement}`}
+                                className="logged-tooltip">
+                                {loggedUser.name}
+                                </Tooltip>
+                            }
+                            >
+                            <img src={loggedUser.img} alt="avatar" />
+                            </OverlayTrigger>
+                        ))}
+                </span>
+                :null
+                } */}
+                <span className="menu-toggle to-l" onClick={()=>toggle()}></span>
+                </div>
             </nav>
         </header>
-
+        
         <Modal 
             show={showLogin} 
             onHide={handleCloseLogin}
@@ -126,6 +153,7 @@ const Header = ({loggedUser, removeloggeduser}) => {
                 </div> 
             </Modal.Body>
         </Modal>
+
         <Modal 
             show={showRegister} 
             onHide={handleCloseReg}
@@ -144,7 +172,7 @@ const Header = ({loggedUser, removeloggeduser}) => {
 
 
 const mapStateToProps = state => ({
-    loggedUser: state.user
+    loggedUser: state.userReducer.userLogged
 })
 
 const mapDispatchToProps = dispatch =>({
@@ -157,4 +185,4 @@ const mapDispatchToProps = dispatch =>({
 })
 
 
-export default connect(mapStateToProps, mapDispatchToProps )(Header)
+export default connect(mapStateToProps, mapDispatchToProps )(  Header)

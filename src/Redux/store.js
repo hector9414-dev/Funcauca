@@ -1,32 +1,47 @@
-import { createStore } from 'redux'
+import { createStore, combineReducers, applyMiddleware } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { ADD_LOGGED_USER, REMOVE_LOGGED_USER } from './actions'
+import { ADD_LOGGED_USER, REMOVE_LOGGED_USER, GET_COURSES_LIST } from './actions'
+import thunk from 'redux-thunk'
 
 
-const initialState = {
-  user : false
+const userState = {
+  userLogged : null
 }
 
 
-const userReducer = (state = initialState, {type, currentUser}) =>{
-    
+const userReducer = (state = userState, {type, data}) =>{
+
     if(type === ADD_LOGGED_USER){
         return {
             ...state,
-            user : true
+            userLogged : data
         }
-            
     }
-
     if(type === REMOVE_LOGGED_USER){
         return {
             ...state,
-            user : false
+            userLogged : null
         }
-            
     }
+    
 
     return state
 }
 
-export default createStore(userReducer, composeWithDevTools())
+const coursesState = {
+    coursesList : []
+  }
+  
+  
+  const coursesReducer = (state = coursesState, {type, data}) =>{
+
+      if(type === GET_COURSES_LIST ){
+          return {
+              ...state,
+              coursesList: state.coursesList.concat(data)
+          }
+      }
+      return state
+  }
+
+export default createStore(combineReducers({userReducer, coursesReducer}) , composeWithDevTools( applyMiddleware( thunk ) ))

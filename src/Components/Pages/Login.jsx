@@ -2,6 +2,7 @@ import React, { createRef } from 'react'
 import { Form, Button, Toast, Spinner } from 'react-bootstrap'
 import * as firebase from "firebase/app"
 import "firebase/auth";
+import "firebase/database";
 import { useState } from 'react';
 import { connect } from 'react-redux';
 import { addLoggedUser } from '../../Redux/actionCreator';
@@ -19,25 +20,14 @@ const Login = ({addloggeduser}) => {
 
     const login = async e =>{
         e.preventDefault()
-       
-        const user={
-
-        }
         setasyncResponse(true)
-        const response = await firebase.auth().signInWithEmailAndPassword(email.current.value, password.current.value).catch(error => {
+        await firebase.auth().signInWithEmailAndPassword(email.current.value, password.current.value).catch(error => {
             setasyncResponse(false)
             setToastTitle("Oops, error")
             setToastMessage(error.message)
             showToast(true)
           })
        
-          if(response){
-              
-              firebase.auth().setPersistence("session")
-              addloggeduser()
-              setasyncResponse(false)
-          }
-
     }
 
     

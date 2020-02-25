@@ -1,6 +1,7 @@
 import React, { createRef } from 'react'
 import { Form, Button, Toast, Spinner } from 'react-bootstrap'
 import * as firebase from "firebase/app"
+import avatar from "../../img/avatar.png"
 import "firebase/auth";
 import "firebase/database";
 import { useState } from 'react';
@@ -22,7 +23,9 @@ const Register = () => {
         e.preventDefault()
         const userReg = {
             name,
-            email
+            email,
+            rol: "user",
+            img: avatar
         }
         setasyncResponse(true)
         if(!name){
@@ -49,13 +52,13 @@ const Register = () => {
                 setToastTitle("Registrado Exitosamente")
                 setToastMessage("Hemos enviado un correo electronico, con un link para verificar tu cuenta")
                 const user = response.user
-                const config = {
-                    url: "http://localhost:3000",
-                }
+                // const config = {
+                //     url: "http://localhost:3000",
+                // }
                 await user.updateProfile({
                     displayName : name
                 })
-                await user.sendEmailVerification(config)
+                // await user.sendEmailVerification(config) funciona ok, comentado mientras desarrollo
                 await user.getIdToken()
                 await firebase.auth().signOut()
                 setasyncResponse(false)

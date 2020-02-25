@@ -5,11 +5,11 @@ import { Accordion, Card } from 'react-bootstrap'
 
 const Fragment = () => {
     return (
-        <div className="class-body s-pt-4">
+        <div className="page-body s-pt-4">
         <div className="ed-grid class-grid lg-grid-6 s-pt-2">
             <div className="lg-cols-4">
                 <Vimeo
-                video="261210430"
+                video="86417015"
                 responsive
                 />
             <div className="video-info">
