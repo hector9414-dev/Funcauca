@@ -16,6 +16,7 @@ const Courses = ({dashboard, home, courses}) => {
                         return Object.values(e).map( course =>
                             <CourseCard
                                 key={course.id}
+                                id={course.id}
                                 img={course.img}
                                 title={course.title}
                                 summary={""}
@@ -39,6 +40,7 @@ const Courses = ({dashboard, home, courses}) => {
                         return Object.values(e).map( course =>
                             <CourseCard
                                 key={course.id}
+                                id={course.id}
                                 img={course.img}
                                 title={course.title}
                                 summary={course.summary}
@@ -66,6 +68,7 @@ const Courses = ({dashboard, home, courses}) => {
                     return Object.values(e).map( course =>
                         <CourseCard
                             key={course.id}
+                            id={course.id}
                             img={course.img}
                             title={course.title}
                             summary={course.summary}

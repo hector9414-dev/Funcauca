@@ -30,7 +30,7 @@
 .main-banner.home{
     background: rgb(52, 66, 58);
     opacity: 2;
-    height: calc(80vh - 4rem);
+    height: calc(65vh - 4rem);
 }
 
 
@@ -148,9 +148,19 @@ body{
     
 .card {
     box-shadow: 0 0 8px rgb(206, 204, 204);
+
+    &.course {
+        box-shadow: none ;
+
+        &:hover{
+            box-shadow: none;
+        }
+    }
+
     &:hover{
         box-shadow: 0 0 8px rgb(141, 141, 141);
     }
+
 
 }
 
@@ -167,7 +177,7 @@ body{
     }
 }
 
-.course-banner {
+.courses-banner {
     
 
     & > img{
@@ -283,7 +293,7 @@ body{
     max-width: 1400px;
 }
 
-.user-panel{
+.content-panel{
     display: flex;
     position: relative;
     flex-direction: column;
@@ -298,6 +308,14 @@ body{
     top: -5rem;
     height: fit-content;
     width: calc(100% + 1rem);
+
+    &.course{
+        padding: 0;
+        margin: 0;
+        box-shadow: none;
+        background: none;
+        top: -13rem;
+    }
     
 }
 
@@ -320,4 +338,42 @@ body{
         margin-bottom: 1rem;
         cursor: pointer;
     }
+}
+
+//Course
+
+.course-banner{
+    height: 18rem;
+    padding: 2rem;
+
+    & > .ed-grid{
+        max-width: 1250px;
+    }
+
+}
+
+.course-content{
+    max-width: 1250px;
+    color: #212221;
+}
+
+.course-data{
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0;
+    padding-top: 1rem;
+
+}
+.cart-button{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    font-size: 1rem;
+    
+
+}
+.shopping-cart{
+    width: 18px;
 }

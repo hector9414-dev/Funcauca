@@ -22,7 +22,7 @@ const Dashboard = ({loggedUser}) => {
         {loggedUser ?
             <div className="page-body dashboard s-mt-4 s-pt-4">
                     <div className="ed-grid lg-grid-12 gap-2 dashboard-container" >
-                    <div className="user-panel lg-cols-2" >
+                    <div className="content-panel lg-cols-2" >
                         <img src={loggedUser.img} alt="avatar" className="dashboard-avatar s-mb-1"/>
                         <p className="t3 s-mb-1 center">{loggedUser.name}</p>
                         <Button>Editar perfil</Button>

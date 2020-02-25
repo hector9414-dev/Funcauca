@@ -52,13 +52,13 @@ const Register = () => {
                 setToastTitle("Registrado Exitosamente")
                 setToastMessage("Hemos enviado un correo electronico, con un link para verificar tu cuenta")
                 const user = response.user
-                // const config = {
-                //     url: "http://localhost:3000",
-                // }
+                const config = {
+                    url: "https://funcaucaedu-eb0cf.firebaseapp.com/",
+                }
                 await user.updateProfile({
                     displayName : name
                 })
-                // await user.sendEmailVerification(config) funciona ok, comentado mientras desarrollo
+                await user.sendEmailVerification(config)
                 await user.getIdToken()
                 await firebase.auth().signOut()
                 setasyncResponse(false)

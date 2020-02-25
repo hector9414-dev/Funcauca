@@ -1,11 +1,9 @@
 import React from 'react'
 import {Card, Button} from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 
-const CourseCard = ({img, title, summary}) => {
+const CourseCard = ({img, title, summary, id}) => {
 
-    console.log(img)
-    console.log(title)
-    console.log(summary)
     return (
         <Card className="s-mb-2 card">
             <Card.Img variant="top" src={img} />
@@ -14,7 +12,9 @@ const CourseCard = ({img, title, summary}) => {
             <Card.Text className="small s-mb-1 lg-mb-2">
                 {summary}
             </Card.Text>
+            <Link to={`/curso/${id}`}>
             <Button variant="primary" className="smaller">Acceder</Button>
+            </Link>
             </Card.Body>
         </Card>
     )
