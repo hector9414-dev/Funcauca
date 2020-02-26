@@ -2,10 +2,11 @@ import React from 'react'
 import CourseCard from '../Organism/CourseCard'
 import Banner from '../Organism/Banner'
 import { connect } from 'react-redux'
+import CourseImg from '../../img/courses.jpg'
 
 
 
-const Courses = ({dashboard, home, courses}) => {
+const Courses = ({dashboard, home, courses, loggedUser}) => {
 
 
     if(dashboard){
@@ -14,13 +15,29 @@ const Courses = ({dashboard, home, courses}) => {
                 {
                     courses.map(e => {
                         return Object.values(e).map( course =>
-                            <CourseCard
-                                key={course.id}
-                                id={course.id}
-                                img={course.img}
-                                title={course.title}
-                                summary={""}
-                            />
+
+                            loggedUser.courses.map( userCourses =>{
+                                if( userCourses===course.id){
+                                    return(
+                                        <CourseCard
+                                        key={course.id}
+                                        id={course.id}
+                                        img={course.img}
+                                        title={course.title}
+                                        summary={""}
+                                    />
+                                    )
+                                }
+                            } )
+
+
+
+                            // console.log(typeof(course.id))
+                            // console.log(typeof(loggedUser.courses))
+
+                            // console.log(course.id == loggedUser.courses)
+
+                            
                         ) 
                     })
                 }
@@ -56,7 +73,7 @@ const Courses = ({dashboard, home, courses}) => {
 
     return (
         <>
-            <Banner img={"https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=966&q=80"}
+            <Banner img={CourseImg}
                 title={"Nuestros Cursos"}
                 color={"black"}
                 opacity={".4"}
@@ -84,9 +101,9 @@ const Courses = ({dashboard, home, courses}) => {
 }
 
 const mapStateToProps = state => ({
+    loggedUser: state.userReducer.userLogged,
     courses: state.coursesReducer.coursesList
 })
-
 
 export default connect(mapStateToProps, {} )(Courses)
 

@@ -1,10 +1,8 @@
 import React from 'react'
-import hero from '../../img/Hero-image.jpg'
+import hero from '../../img/banner.jpg'
 import logo from '../../img/logo-no-text-.png'
 
 const Banner = ({home, course, img, title, description, height, color, opacity}) => {
-
-
 
     if(home){
         return (

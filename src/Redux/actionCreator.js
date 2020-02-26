@@ -18,9 +18,16 @@ const removeLoggedUser = () =>({
 
 
 const getCourses = () => async dispatch => {
-    
-    const response = await firebase.database().ref("/Courses").once("value")
-    const data = response.val()
+    let data
+    if(localStorage.getItem("courses")){
+        data = JSON.parse(localStorage.getItem("courses"))
+    }
+    else{
+        const response = await firebase.database().ref("/Courses").once("value")
+        const courseResponse = response.val()
+        localStorage.setItem("courses", JSON.stringify(courseResponse))
+        data = courseResponse
+    }
 
     return dispatch({
         type : GET_COURSES_LIST,

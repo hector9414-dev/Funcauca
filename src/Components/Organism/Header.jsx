@@ -9,6 +9,7 @@ import { connect } from 'react-redux'
 import { removeLoggedUser, getCourses } from '../../Redux/actionCreator';
 import { useEffect } from 'react'
 import store from '../../Redux/store'
+import Avatar from '../Atoms/Avatar'
 
 
 store.dispatch( getCourses() )
@@ -19,15 +20,22 @@ const Header = ({loggedUser, removeloggeduser}) => {
     const [showRegister, setShowRegister] = useState(false)
     const [showLogin, setShowLogin] = useState(false)
     const [modal, setModal] = useState()
+    
     const [regOk, showregisteredOk] = useState(false)
     const [currentUser, setCurrentUser] = useState(false)
-    
     const menu = createRef()
 
-    const handleOpenReg = () =>{setShowRegister(true) 
-                                setModal("reg")}
-    const handleCloseReg = () =>{setShowRegister(false)
-                                showregisteredOk(false)}
+   
+    
+
+    const handleOpenReg = () =>{
+        setShowRegister(true) 
+        setModal("reg")
+    }
+    const handleCloseReg = () =>{
+        setShowRegister(false)
+        showregisteredOk(false)
+    }
     const handleOpenLogin = ()=>{setShowLogin(true)}
     const handleCloseLogin = ()=>{setShowLogin(false)}
     
@@ -40,16 +48,15 @@ const Header = ({loggedUser, removeloggeduser}) => {
         localStorage.clear()
     }
 
-    
    useEffect(()=>{
        if(loggedUser){
            handleCloseLogin();
+            
        }
-           
-       
    },[loggedUser])
     
     
+
     return (
         <>
         <header className="main-header ">
@@ -75,10 +82,10 @@ const Header = ({loggedUser, removeloggeduser}) => {
                                 {
                                     loggedUser ?
                                     <div className="menu-ed-grid ed-grid lg-cross-center logged-menu">
-                                        <div> 
+                                        <div className="user-info"> 
                                             <Link to="/dashboard">
-                                            <span className="t5">{loggedUser.name}</span>  
-                                            <img src={loggedUser.img} alt="avatar" className="logged-avatar"/>
+                                            <span className="t5 s-mr-1">{loggedUser.name}</span>  
+                                            <Avatar />
                                             </Link>
                                         </div>
                                         <Button onClick={()=>logOut()} className="small ghost logout-button">Salir</Button>

@@ -1,107 +1,90 @@
 import React from 'react'
 import Vimeo from '@u-wave/react-vimeo';
 import { Accordion, Card } from 'react-bootstrap'
+import { connect } from 'react-redux'
+import { NavLink, Link } from 'react-router-dom'
+import Whitecheck from '../../img/white-check.png'
 
 
-const Fragment = () => {
+const Fragment = ({match, courses}) => {
+
+    let actualSection = {}
+    let matchedCourse = {}
+    let actualClass = {}
+    const {courseId, classId, videoId } = match.params
+    const actualCourse = (courses.map(e => { return (Object.values(e).filter( course => course.id === courseId )) }))
+
+    actualCourse.map(course =>(Object.values(course).map(e => matchedCourse = e)))   
+    const { content }= matchedCourse
+
+    if(content){
+        content.filter(content => content.id === classId).map( section => actualSection = section )
+    }
+
+    if(actualSection.classes){
+        actualSection.classes.filter( classes => classes.id === videoId).map(classes => actualClass = classes)
+    }
+
     return (
         <div className="page-body s-pt-4">
         <div className="ed-grid class-grid lg-grid-6 s-pt-2">
             <div className="lg-cols-4">
                 <Vimeo
-                video="86417015"
+                video={videoId}
                 responsive
                 />
-            <div className="video-info">
-                <p className="t2 s-pt-2 s-mb-1">1.1 - Introduccion</p>
-                <p className="t4">AIEPI para la comunidad</p>
-            </div>
+                {
+                    actualSection ?
+                        <div className="video-info">
+                        <p className="t2 s-pt-2 s-mb-0 class-name"> {actualClass.name} </p>
+                        <Link to={`/curso/${courseId}`} >
+                            <p > {matchedCourse.title} </p>
+                        </Link>
+                        </div>
+                    
+                    :
+                    <p>Cargando</p>
+                }
             </div>
             <div className="lg-cols-2 class-container">
-                <Accordion defaultActiveKey="0" >
-                <Card className="class-card">
-                    <Accordion.Toggle as={Card.Header} 
-                    eventKey="0"
-                    className="t3"
-                    >
-                    Modulo 1
-                    </Accordion.Toggle>
-                    <Accordion.Collapse eventKey="0">
-                    <Card.Body>
-                        <ul class="class-list">
-                            <li> 1.1 Introduccion</li>
-                            <li> 1.2 Que es AIEPI ?</li>
-                            <li> 1.3 Beneficios</li>
-                            <li> 1.4 Etapas</li>
-                            <li> 1.5 Examén</li>
-                        </ul>
-                    </Card.Body>
-                    </Accordion.Collapse>
-                </Card>
-                <Card className="class-card">
-                    <Accordion.Toggle as={Card.Header} eventKey="1" className="t3">
-                    Modulo 2
-                    </Accordion.Toggle>
-                    <Accordion.Collapse eventKey="1">
-                    <Card.Body>
-                        <ul class="class-list">
-                            <li> 1.1 Introduccion</li>
-                            <li> 1.2 Que es AIEPI ?</li>
-                            <li> 1.3 Beneficios</li>
-                            <li> 1.4 Etapas</li>
-                            <li> 1.5 Examén</li>
-                        </ul>
-                    </Card.Body>
-                    </Accordion.Collapse>
-                </Card>
-                <Card className="class-card">
-                    <Accordion.Toggle as={Card.Header} eventKey="2" className="t3">
-                    Modulo 3
-                    </Accordion.Toggle>
-                    <Accordion.Collapse eventKey="2">
-                    <Card.Body>
-                        <ul class="class-list">
-                            <li> 1.1 Introduccion</li>
-                            <li> 1.2 Que es AIEPI ?</li>
-                            <li> 1.3 Beneficios</li>
-                            <li> 1.4 Etapas</li>
-                            <li> 1.5 Examén</li>
-                        </ul>
-                    </Card.Body>
-                    </Accordion.Collapse>
-                </Card>
-                <Card className="class-card">
-                    <Accordion.Toggle as={Card.Header} eventKey="3" className="t3">
-                    Modulo 4
-                    </Accordion.Toggle>
-                    <Accordion.Collapse eventKey="3">
-                    <Card.Body>
-                        <ul class="class-list">
-                            <li> 1.1 Introduccion</li>
-                            <li> 1.2 Que es AIEPI ?</li>
-                            <li> 1.3 Beneficios</li>
-                            <li> 1.4 Etapas</li>
-                            <li> 1.5 Examén</li>
-                        </ul>
-                    </Card.Body>
-                    </Accordion.Collapse>
-                </Card>
-                <Card className="class-card">
-                    <Accordion.Toggle as={Card.Header} eventKey="4" className="t3">
-                    Modulo 5
-                    </Accordion.Toggle>
-                    <Accordion.Collapse eventKey="4">
-                    <Card.Body>
-                        <ul class="class-list">
-                            <li> 1.1 Introduccion</li>
-                            <li> 1.2 Que es AIEPI ?</li>
-                            <li> 1.3 Beneficios</li>
-                            <li> 1.4 Etapas</li>
-                            <li> 1.5 Examén</li>
-                        </ul>
-                    </Card.Body>
-                    </Accordion.Collapse>
-                </Card>
+                <Accordion defaultActiveKey={classId} >
+                    {
+                        content ?
+                            content.map( section => {
+                                return(
+                                <Card className="class-card" key={section.id} >
+                                    <Accordion.Toggle as={Card.Header} 
+                                    eventKey={section.id}
+                                    className="t3"
+                                    >
+                                    {section.title}
+                                    </Accordion.Toggle>
+                                    <Card.Body>
+                                        <ul className="class-list fragment">
+                                            {
+                                                section.classes.map( classes => 
+                                                            <li key={classes.id}> 
+                                                                < NavLink to={`/class/${matchedCourse.id}/${section.id}/${classes.id}`} 
+                                                                className="class-link fragment" 
+                                                                activeClassName="active"
+                                                                >
+                                                                    <img src={Whitecheck} alt="" width="15px" className="s-mr-1"/>
+                                                                    <span>{classes.name}</span>
+                                                                </NavLink>
+                                                            </li>
+                                                    
+                                                    
+                                                    )
+                                            }
+                                        </ul>
+                                    </Card.Body>
+                                </Card>
+                                )
+                            })
+                            
+                        :
+                        <p>Cargando</p>
+                    }
                 </Accordion>
             </div>
         </div>
@@ -109,4 +92,9 @@ const Fragment = () => {
     )
 }
 
-export default Fragment
+const mapStateToProps = state => ({
+    courses: state.coursesReducer.coursesList
+})
+
+
+export default connect(mapStateToProps, {} )(Fragment)

@@ -11,14 +11,28 @@ import * as firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/database'
 import { useEffect } from 'react';
-import { addLoggedUser } from '../Redux/actionCreator'
+import { addLoggedUser, getCourses } from '../Redux/actionCreator'
 import Dashboard from './Pages/Dashboard'
+import Private from './Routes/Private'
+import Profile from './Pages/Profile'
+import store from '../Redux/store'
 
 
 
 const AppRouter = ({addUser}) => {
 
     useEffect(()=>{
+
+        const checkCoursesDataBase = async () =>{
+            const response = await firebase.database().ref("/Courses").once("value")
+            const coursesResponse = response.val()
+            if(JSON.stringify(coursesResponse) !== localStorage.getItem("courses")){
+                localStorage.removeItem("courses")
+                store.dispatch( getCourses() )
+            }
+        }
+        
+        checkCoursesDataBase()
 
         if(localStorage.getItem("user")){
             addUser(JSON.parse(localStorage.getItem("user")))
@@ -33,13 +47,21 @@ const AppRouter = ({addUser}) => {
                         localStorage.setItem("token", JSON.stringify(token))
                         const snapshot = await firebase.database().ref(`/Users/${uid}`).once("value")
                         const data = snapshot.val()
-                        const {img, name, email} = data
+                        const {birthDate, city, country, courses, gender, idNumber, lastName, name} = data
+
+                        
     
                         const loggedUser ={
+                            birthDate,
+                            city,
+                            country,
+                            courses,
+                            gender,
+                            idNumber,
+                            lastName,
                             name,
-                            email,
                             uid,
-                            img
+                            userToken: localStorage.setItem("token", JSON.stringify(token))
                             
                         }
                             localStorage.setItem("user", JSON.stringify(loggedUser))
@@ -62,8 +84,9 @@ const AppRouter = ({addUser}) => {
                     <Route path="/cursos" component = { Courses }/>
                     <Route path="/conocenos" component = { AboutUs }/>
                     <Route path="/curso/:id" component = { Course }/>
-                    <Route path="/fragment" component = { Fragment } />
-                    <Route path="/dashboard" component = { Dashboard } />
+                    <Private path="/class/:courseId/:classId/:videoId" component  = { Fragment } />
+                    <Private path="/dashboard" component = { Dashboard } />
+                    <Route path="/editar-perfil" component = { Profile } />
                     <Route component={()=><p>Error 404</p>} />
                 </Switch>
         </Router>

@@ -36,6 +36,11 @@ const coursesState = {
   const coursesReducer = (state = coursesState, {type, data}) =>{
 
       if(type === GET_COURSES_LIST ){
+
+        if(state.coursesList){
+            state.coursesList = []
+        }
+
           return {
               ...state,
               coursesList: state.coursesList.concat(data)

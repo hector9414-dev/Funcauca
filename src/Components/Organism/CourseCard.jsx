@@ -6,14 +6,14 @@ const CourseCard = ({img, title, summary, id}) => {
 
     return (
         <Card className="s-mb-2 card">
-            <Card.Img variant="top" src={img} />
+            <Card.Img variant="top" src={img} alt={title} />
             <Card.Body>
             <Card.Title className="t4 s-mt-1">{title}</Card.Title>
             <Card.Text className="small s-mb-1 lg-mb-2">
                 {summary}
             </Card.Text>
             <Link to={`/curso/${id}`}>
-            <Button variant="primary" className="smaller">Acceder</Button>
+            <Button variant="primary" className="smaller card-button">Acceder</Button>
             </Link>
             </Card.Body>
         </Card>

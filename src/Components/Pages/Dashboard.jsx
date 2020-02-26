@@ -1,14 +1,12 @@
 import React from 'react'
 import Banner from '../Organism/Banner'
 import { connect } from 'react-redux'
-import { Redirect } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Button } from 'react-bootstrap'
 import Courses from './Courses'
+import Avatar from '../Atoms/Avatar'
 
 const Dashboard = ({loggedUser}) => {
-
-    if(!localStorage.getItem("token")){ return <Redirect to="/" /> }
-    
 
     return (
         <>
@@ -23,9 +21,16 @@ const Dashboard = ({loggedUser}) => {
             <div className="page-body dashboard s-mt-4 s-pt-4">
                     <div className="ed-grid lg-grid-12 gap-2 dashboard-container" >
                     <div className="content-panel lg-cols-2" >
-                        <img src={loggedUser.img} alt="avatar" className="dashboard-avatar s-mb-1"/>
+                        <div className="dasboard-avatar-container">
+                        <Avatar />
+                        </div>
                         <p className="t3 s-mb-1 center">{loggedUser.name}</p>
-                        <Button>Editar perfil</Button>
+
+                            <Link to="/editar-perfil">
+                                <Button>
+                                        Editar perfil
+                                </Button>
+                            </Link>
                     </div>
                     <div className="courses-panel lg-cols-8 s-mt-4 lg-mt-0 ">
                         <p className="t2 s-mb-4 center">Mis cursos</p>
@@ -53,7 +58,7 @@ const Dashboard = ({loggedUser}) => {
 }
 
 const mapStateToProps = state => ({
-    loggedUser: state.userReducer.userLogged
+    loggedUser: state.userReducer.userLogged,
 })
 
 export default connect(mapStateToProps, {} )(Dashboard)

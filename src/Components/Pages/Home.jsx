@@ -7,6 +7,8 @@ import { connect } from 'react-redux';
 const Home = ({loggedUser}) => {
 
     
+
+    
         return (
             <>
             <Banner className="s-mb-4" home />
