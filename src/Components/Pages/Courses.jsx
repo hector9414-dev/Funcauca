@@ -8,38 +8,33 @@ import CourseImg from '../../img/courses.jpg'
 
 const Courses = ({dashboard, home, courses, loggedUser}) => {
 
-
     if(dashboard){
         return (
             <div className="ed-grid s-grid-1  lg-grid-3">
-                {
-                    courses.map(e => {
-                        return Object.values(e).map( course =>
-
-                            loggedUser.courses.map( userCourses =>{
-                                if( userCourses===course.id){
-                                    return(
-                                        <CourseCard
-                                        key={course.id}
-                                        id={course.id}
-                                        img={course.img}
-                                        title={course.title}
-                                        summary={""}
-                                    />
-                                    )
-                                }
-                            } )
-
-
-
-                            // console.log(typeof(course.id))
-                            // console.log(typeof(loggedUser.courses))
-
-                            // console.log(course.id == loggedUser.courses)
-
-                            
-                        ) 
-                    })
+                {   
+                    loggedUser.courses?
+                        courses ?
+                        courses.map(e => {
+                            return Object.values(e).map( course =>
+                                loggedUser.courses.map( userCourses =>{
+                                    if( userCourses===course.id){
+                                        return(
+                                            <CourseCard
+                                            key={course.id}
+                                            id={course.id}
+                                            img={course.img}
+                                            title={course.title}
+                                            summary={""}
+                                        />
+                                        )
+                                    }
+                                } )
+                            ) 
+                        })
+                        :
+                        <p>cargando</p>
+                    :
+                    <p>Oops, aun no tienes cursos</p>
                 }
            </div>
             

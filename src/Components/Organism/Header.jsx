@@ -6,16 +6,17 @@ import Register from '../Pages/Register'
 import Login from '../Pages/Login'
 import * as firebase from 'firebase/app'
 import { connect } from 'react-redux'
-import { removeLoggedUser, getCourses } from '../../Redux/actionCreator';
+import { removeLoggedUser, getCourses, addCourseToCart, getLocalCart } from '../../Redux/actionCreator';
 import { useEffect } from 'react'
 import store from '../../Redux/store'
 import Avatar from '../Atoms/Avatar'
+import Cart from '../../img/cart.png'
 
 
+store.dispatch( getLocalCart() )
 store.dispatch( getCourses() )
 
-const Header = ({loggedUser, removeloggeduser}) => {
-
+const Header = ({loggedUser, removeloggeduser, cart, addcoursetocart}) => {
 
     const [showRegister, setShowRegister] = useState(false)
     const [showLogin, setShowLogin] = useState(false)
@@ -24,9 +25,6 @@ const Header = ({loggedUser, removeloggeduser}) => {
     const [regOk, showregisteredOk] = useState(false)
     const [currentUser, setCurrentUser] = useState(false)
     const menu = createRef()
-
-   
-    
 
     const handleOpenReg = () =>{
         setShowRegister(true) 
@@ -45,13 +43,13 @@ const Header = ({loggedUser, removeloggeduser}) => {
         firebase.auth().signOut()
         removeloggeduser()
         setCurrentUser(false)
-        localStorage.clear()
+        localStorage.removeItem("user")
+        localStorage.removeItem("token")
     }
 
    useEffect(()=>{
        if(loggedUser){
            handleCloseLogin();
-            
        }
    },[loggedUser])
     
@@ -80,19 +78,30 @@ const Header = ({loggedUser, removeloggeduser}) => {
                         <div className="menu-login lg-main-end">
                             <ul className="lg-cross-center">
                                 {
+                                    cart > 0 ?
+                                        <div className="cart-container">
+                                            <Link to="/cart" >
+                                                <img src={Cart} alt="cart"/>
+                                                <div className="cart-counter">
+                                                    <span className="t6"> {cart} </span>
+                                                </div>
+                                            </Link>
+                                        </div>
+                                    :
+                                    null
+                                }
+                                    {
                                     loggedUser ?
-                                    <div className="menu-ed-grid ed-grid lg-cross-center logged-menu">
-                                        <div className="user-info"> 
+                                    <>
+                                        <div className="user-info s-mr-3"> 
                                             <Link to="/dashboard">
                                             <span className="t5 s-mr-1">{loggedUser.name}</span>  
                                             <Avatar />
                                             </Link>
                                         </div>
-                                        <Button onClick={()=>logOut()} className="small ghost logout-button">Salir</Button>
-                                    </div>
+                                        <Button onClick={()=>logOut()} variant="outline-primary" size="sm">Salir</Button>
+                                        </>
                                     :
-                                    
-
                                     <>
                                     <li className="s-mb-2">
                                         <div className="lg-mr-2 normal div-link" onClick={() => handleOpenLogin()} >Ingresar</div>
@@ -179,13 +188,18 @@ const Header = ({loggedUser, removeloggeduser}) => {
 
 
 const mapStateToProps = state => ({
-    loggedUser: state.userReducer.userLogged
+    loggedUser: state.userReducer.userLogged,
+    cart: state.cartReducer.cart.length
 })
 
 const mapDispatchToProps = dispatch =>({
     
-    removeloggeduser(){
+    removeloggeduser(courseId){
         dispatch( removeLoggedUser() )
+    },
+
+    addcoursetocart(courseId){
+        dispatch( addCourseToCart(courseId) )
     }
 
 

@@ -1,4 +1,4 @@
-import { ADD_LOGGED_USER, REMOVE_LOGGED_USER, GET_COURSES_LIST  } from "./actions"
+import { ADD_LOGGED_USER, REMOVE_LOGGED_USER, GET_COURSES_LIST, ADD_COURSE_TO_CART, REMOVE_COURSE_FROM_CART, FLUSH_CART  } from "./actions"
 import * as firebase from "firebase/app"
 import "firebase/database";
 import firebaseConfig from "../Firebase/config";
@@ -9,8 +9,6 @@ const addLoggedUser = userLogged =>({
     type : ADD_LOGGED_USER,
     data: userLogged
 })
-
-
 
 const removeLoggedUser = () =>({
     type : REMOVE_LOGGED_USER
@@ -36,5 +34,58 @@ const getCourses = () => async dispatch => {
 
 }
 
+const getLocalCart = ()=> dispatch=>{
+    if(localStorage.getItem("cart")){
+        const courseId = JSON.parse(localStorage.getItem("cart"))
+        return dispatch({
+            type: ADD_COURSE_TO_CART,
+            courseId
+        })
+    }
+    
+}
 
-export { addLoggedUser, removeLoggedUser, getCourses  }
+
+const addCourseToCart = courseId => dispatch =>{
+    if(localStorage.getItem("cart")){
+        const tempCart = JSON.parse(localStorage.getItem("cart"))
+        const localCart = [...tempCart, courseId]
+        localStorage.setItem("cart",JSON.stringify(localCart))
+    }
+
+    else{
+        localStorage.setItem("cart", JSON.stringify(courseId))
+    }
+     
+    return dispatch({
+        type: ADD_COURSE_TO_CART,
+        courseId
+
+    })
+    
+}
+
+const removeCourseFromCart = courseId => dispatch =>{
+
+    const tempCart = JSON.parse(localStorage.getItem("cart"))
+    const newCart = tempCart.filter(course => course !==courseId)
+    localStorage.setItem("cart", JSON.stringify(newCart))
+    
+    return dispatch({
+        type: REMOVE_COURSE_FROM_CART,
+        courseId
+    })
+    
+}
+
+const flushCart = () => dispatch =>{
+
+    localStorage.removeItem("cart")
+
+    return dispatch({
+        type: FLUSH_CART
+    })
+}
+
+
+export { addLoggedUser, removeLoggedUser, getCourses, addCourseToCart, removeCourseFromCart, getLocalCart, flushCart  }

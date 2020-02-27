@@ -118,6 +118,24 @@ body{
     justify-content: flex-end;
 }
 
+.cart-container{
+    display: inline;
+}
+
+.cart-counter{
+    display: inline-flex;
+    position: relative;
+    background: rgb(0, 255, 149);
+    border-radius: 50%;
+    height: 1rem;
+    width: 1rem;
+    justify-content: center;
+    align-items: center;
+    color: rgb(39, 39, 39);
+    bottom: .5rem;
+    right: .5rem;
+}
+
 .user-info{
     height: 2rem;
 }
@@ -393,9 +411,8 @@ body{
     width: 100%;
     justify-content: center;
     font-size: 1rem;
-    
-
 }
+
 .shopping-cart{
     width: 18px;
 }
@@ -520,6 +537,31 @@ body{
     justify-content: center;
     bottom: 0;
     
+}
+
+//Cart page
+.cart-items-container{
+    
+}
+
+.cart-card{
+    background: #fdfdfe;
+    padding: 1rem;
+    border: 1px solid rgb(201, 199, 199);
+    border-bottom: none;
+
+    &:first-child{
+        border: 1px solid rgb(201, 199, 199);
+        border-radius: .3rem .3rem 0 0;
+        border-bottom: none;
+    }
+}
+
+.cart-footer{
+    padding: 1rem;
+    border: 1px solid rgb(201, 199, 199);
+    border-radius: 0 0 .3rem .3rem;
+    background: #f0f0ff;
 }
 
 //Day picker styles

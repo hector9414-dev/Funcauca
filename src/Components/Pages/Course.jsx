@@ -7,22 +7,29 @@ import Check from '../../img/check.png'
 import Locked from '../../img/locked.png'
 import { useState } from 'react'
 import { useEffect } from 'react'
+import { addCourseToCart } from '../../Redux/actionCreator'
 
-const Course = ({match, coursesList, loggedUser}) => {
+const Course = ({match, coursesList, loggedUser, addcoursetocart, cart}) => {
 
     const [courseLocked, setCourseLocked] = useState(true)    
-    const actualCourse = (coursesList.map(e => { return (Object.values(e).filter( course => course.id === match.params.id )) }))
-    
+
     let locked 
     let matchedCourse = {}
-    
-    actualCourse.map(course =>(Object.values(course).map(e => matchedCourse = e))) 
 
-    Array.prototype.includes()
+    if(coursesList){
+        const actualCourse = (coursesList.map(e => { return (Object.values(e).filter( course => course.id === match.params.id )) }))
+        actualCourse.map(course =>(Object.values(course).map(e => matchedCourse = e))) 
+    }
+
 
     if(loggedUser){
-        if(loggedUser.courses.includes(matchedCourse.id)){
-            locked = false
+        if(loggedUser.courses){
+            if(loggedUser.courses.includes(matchedCourse.id)){
+                locked = false
+            }
+            else{
+                locked = true
+            }
         }
         else{
             locked = true
@@ -32,26 +39,17 @@ const Course = ({match, coursesList, loggedUser}) => {
         locked = true
     }
     
-
-    
     useEffect(() => {
         setCourseLocked(locked)
     }, [locked])
 
-    
-    
-        
-    
     return (
         <div>
             <Banner course title={matchedCourse.title}
                 description={matchedCourse.description}
                 color={"#212221"}
             />
-            {
-                // console.log(courseTruelocked)
-            }
-             <div className="ed-grid course-content lg-grid-10 gap-2" >
+             <div className="ed-grid course-content lg-grid-10 gap-2 s-pt-4" >
                     <div className="lg-cols-6  s-mt-4 lg-mt-0 ">
                         <p className="t2 s-mb-4 s-pl-0 left">Contenido del curso</p>
                         {
@@ -95,20 +93,70 @@ const Course = ({match, coursesList, loggedUser}) => {
                     </div>
                     <div className="content-panel course lg-x-8 lg-cols-3" >
                     <Card className="card course s-mb-2 ">
+                        
                         <Card.Img variant="top" src={matchedCourse.img} />
                         <Card.Body>
                         <Card.Title className="t3 s-mt-1 center">{matchedCourse.title}</Card.Title>
                         <Card.Text className="small s-mb-1 lg-mb-2 center">
-                            {matchedCourse.summary}
+                        {
+                            matchedCourse?
+
+                            matchedCourse.summary
+                            :
+                            null
+
+                        }
                         </Card.Text>
                         <Card.Text className="s-mb-1 lg-mb-2 center t3">
-                            {matchedCourse.price}
+                        {
+                            matchedCourse?
+                            
+                            matchedCourse.price
+                            :
+                            null
+
+                        }
                         </Card.Text>
-                        <Link to={`/curso/${matchedCourse.id}`}>
-                        <Button variant="primary s-cross-center" className="small ghost cart-button">
-                            <span className="strong">Agregar al carrito</span> 
-                        </Button>
-                        </Link>
+                        {
+                            loggedUser?
+                                loggedUser.courses ?
+                                    loggedUser.courses.includes(matchedCourse.id)?
+                                    <Button block disabled={true} variant={'primary'} >Ya tienes este curso</Button>
+                                    :
+                                    null
+                                :
+                                <Button
+                                onClick={()=>addcoursetocart(matchedCourse.id)}
+                                disabled={cart.includes(matchedCourse.id)}
+                                block
+                                variant={'success'}
+                                >
+                                {
+                                    cart.includes(matchedCourse.id)?
+                                    <span className="ed-container s-main-center">En el carrito</span> 
+                                    :
+                                    <span className="ed-container s-main-center">Agregar al carrito</span> 
+                                }
+                                
+                                </Button>
+                            :
+                                <Button
+                                onClick={()=>addcoursetocart(matchedCourse.id)}
+                                disabled={cart.includes(matchedCourse.id)}
+                                block
+                                variant={'success'}
+                                >
+                                {
+                                    cart.includes(matchedCourse.id)?
+                                    <span className="ed-container s-main-center">En el carrito</span> 
+                                    :
+                                    <span className="ed-container s-main-center">Agregar al carrito</span>
+                                } 
+                                </Button>   
+                                
+                        }
+
+                        
                         </Card.Body>
                     </Card>
                     </div>
@@ -120,8 +168,17 @@ const Course = ({match, coursesList, loggedUser}) => {
 
 const mapStateToProps = state => ({
     coursesList: state.coursesReducer.coursesList,
-    loggedUser: state.userReducer.userLogged
+    loggedUser: state.userReducer.userLogged,
+    cart: state.cartReducer.cart
 })
 
+const mapDispatchToProps = dispatch =>({
+    
+    addcoursetocart(courseId){
+        dispatch( addCourseToCart(courseId) )
+    }
 
-export default connect(mapStateToProps, {} )(Course)
+
+})
+
+export default connect(mapStateToProps, mapDispatchToProps )(Course)

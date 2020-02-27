@@ -11,15 +11,16 @@ import * as firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/database'
 import { useEffect } from 'react';
-import { addLoggedUser, getCourses } from '../Redux/actionCreator'
+import { addLoggedUser, getCourses, addCourseToCart } from '../Redux/actionCreator'
 import Dashboard from './Pages/Dashboard'
 import Private from './Routes/Private'
 import Profile from './Pages/Profile'
 import store from '../Redux/store'
+import Cart from './Pages/Cart'
 
 
 
-const AppRouter = ({addUser}) => {
+const AppRouter = ({addUser,getlocalCart}) => {
 
     useEffect(()=>{
 
@@ -86,7 +87,8 @@ const AppRouter = ({addUser}) => {
                     <Route path="/curso/:id" component = { Course }/>
                     <Private path="/class/:courseId/:classId/:videoId" component  = { Fragment } />
                     <Private path="/dashboard" component = { Dashboard } />
-                    <Route path="/editar-perfil" component = { Profile } />
+                    <Private path="/editar-perfil" component = { Profile } />
+                    <Route path="/cart" component = { Cart }/>
                     <Route component={()=><p>Error 404</p>} />
                 </Switch>
         </Router>
@@ -99,8 +101,6 @@ const mapDispatchToProps = dispatch =>({
     addUser(user){
         dispatch( addLoggedUser(user) )
     }
-
-
 })
 
 const mapStateToProps = state => ({})
