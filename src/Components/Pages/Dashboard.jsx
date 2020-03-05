@@ -5,8 +5,41 @@ import { Link } from 'react-router-dom'
 import { Button } from 'react-bootstrap'
 import Courses from './Courses'
 import Avatar from '../Atoms/Avatar'
+import Axios from 'axios'
+import { useEffect } from 'react'
+import { useState } from 'react'
 
 const Dashboard = ({loggedUser}) => {
+
+    let secondName 
+    let firstName 
+    const [flagUrl, setFlagUrl] = useState()
+
+    if(loggedUser){
+        if(((loggedUser.name).trim()).includes(" ")){
+           const letterIndex = (loggedUser.name).indexOf(" ")
+           secondName = (loggedUser.name)[letterIndex+1]+"."
+           firstName = (loggedUser.name).split(" ")[0]
+
+        }
+        else{
+            firstName = loggedUser.name
+        }
+    }
+
+    const getFlag = async() =>{
+        if(loggedUser){
+            const response = await Axios.get(`https://restcountries.eu/rest/v2/name/${loggedUser.country}`)
+            const tempData = response.data[0]
+            setFlagUrl(tempData.flag)
+            
+        }
+    }
+    
+
+    useEffect(()=>{
+        getFlag()
+    },[flagUrl])
 
     return (
         <>
@@ -24,7 +57,20 @@ const Dashboard = ({loggedUser}) => {
                         <div className="dasboard-avatar-container">
                         <Avatar />
                         </div>
-                        <p className="t3 s-mb-1 center">{loggedUser.name}</p>
+                        
+                        {
+                            loggedUser.lastName?
+                            <p className="t5 s-mb-1 center">{firstName} {secondName} {loggedUser.lastName}</p>
+                            :
+                            <p className="t5 s-mb-0 center">{loggedUser.name}</p>
+
+                        }
+                        {
+                            loggedUser.country?
+                            <p className="small s-mb-1 center">{loggedUser.country} <img src={flagUrl} alt={loggedUser.country} className="country-flag"/> </p>
+                            : 
+                            null
+                        }
 
                             <Link to="/editar-perfil">
                                 <Button>

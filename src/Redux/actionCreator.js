@@ -16,6 +16,7 @@ const removeLoggedUser = () =>({
 
 
 const getCourses = () => async dispatch => {
+    
     let data
     if(localStorage.getItem("courses")){
         data = JSON.parse(localStorage.getItem("courses"))

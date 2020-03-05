@@ -1,10 +1,11 @@
 import React, { createRef } from 'react'
 import { Form, Button, Toast, Spinner } from 'react-bootstrap'
 import * as firebase from "firebase/app"
-import avatar from "../../img/avatar.png"
 import "firebase/auth";
 import "firebase/database";
+import "firebase/storage";
 import { useState } from 'react';
+import Avatar from '../../img/avatar.png'
 
 
 
@@ -18,24 +19,59 @@ const Register = () => {
     const [toastTitle, setToastTitle] = useState(false)    
     const [asyncResponse, setasyncResponse] = useState()    
     
+    let imgString = Avatar
 
     const handleRegister = async (e,name, email, password) =>{
         e.preventDefault()
-        const userReg = {
-            name,
-            email,
-            rol: "user",
-            img: avatar
-        }
         setasyncResponse(true)
         if(!name){
+            console.log("hola")
             setToastTitle("Oops, algo sucedió")
             setToastMessage("Tu nombre es requerido")
             showregToast(true)
             return
         }
 
-        const response = await firebase.auth().createUserWithEmailAndPassword(email, password).catch(error => {
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then( response => {
+            firebase.auth().signOut()
+            const user = response.user
+            const {uid} = user
+            const userReg = {
+                name,
+                email,
+                rol: "user",
+                courses: [""],
+                uid
+            }
+            const imagesRef = firebase.storage().ref().child(`/Images/${uid}`)
+            const userRef = firebase.database().ref(`/Users/${uid}`)
+
+            imagesRef.putString(imgString, 'data_url')
+            userRef.set(userReg)
+            
+
+            setToastTitle("Registrado Exitosamente")
+            setToastMessage("Hemos enviado un correo electronico, con un link para verificar tu cuenta")
+
+            const config = {
+                url: "http://localhost:3000",
+            }
+
+            user.updateProfile({
+                displayName : name
+            })
+            user.sendEmailVerification(config)
+            showregToast(true)
+            setasyncResponse(false)
+            setTimeout(()=>{
+                window.location.reload()
+                
+            },3000)
+            
+
+        })
+        .catch(error => {
             setasyncResponse(false)
             setToastTitle("Oops, ha ocurrido un error")
             switch(error.code){
@@ -45,26 +81,10 @@ const Register = () => {
                 default:
                     setToastMessage(error.message)
             }
+            showregToast(true)
           })
-       
-          if(response){
-                firebase.database().ref(`/Users/${response.user.uid}`).set(userReg)
-                setToastTitle("Registrado Exitosamente")
-                setToastMessage("Hemos enviado un correo electronico, con un link para verificar tu cuenta")
-                const user = response.user
-                const config = {
-                    url: "https://funcaucaedu-eb0cf.firebaseapp.com/",
-                }
-                await user.updateProfile({
-                    displayName : name
-                })
-                await user.sendEmailVerification(config)
-                await user.getIdToken()
-                await firebase.auth().signOut()
-                setasyncResponse(false)
-          }
 
-          showregToast(true)
+          
 
     }
 
@@ -99,7 +119,7 @@ const Register = () => {
             </Button>
             
         }
-        
+
         <Toast show={regToast} onClose={()=> showregToast(false)} className="error" delay={4000} autohide>
             <Toast.Header>
                 <strong className="mr-auto">{toastTitle}</strong>

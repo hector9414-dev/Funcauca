@@ -19,15 +19,32 @@ const Login = ({addloggeduser}) => {
     const [asyncResponse, setasyncResponse] = useState() 
 
     const login = async e =>{
+
         e.preventDefault()
         setasyncResponse(true)
-        await firebase.auth().signInWithEmailAndPassword(email.current.value, password.current.value).catch(error => {
+         firebase.auth().signInWithEmailAndPassword(email.current.value, password.current.value).catch(error => {
+            firebase.auth().signOut()
             setasyncResponse(false)
             setToastTitle("Oops, error")
             setToastMessage(error.message)
             showToast(true)
           })
-       
+          .then( user =>{
+            if(user){
+                if(!user.user.emailVerified){
+                    firebase.auth().signOut()
+                    setToastTitle("Oops, error")
+                    setToastMessage("Debes verificar tu cuenta primero")
+                    showToast(true)
+                    setasyncResponse(false)
+                }
+                else{
+                user.user.getIdToken()
+                .then( token => localStorage.setItem("token", JSON.stringify(token)))
+                window.location.reload()
+                }
+            }
+          })
     }
 
     

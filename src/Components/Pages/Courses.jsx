@@ -12,12 +12,12 @@ const Courses = ({dashboard, home, courses, loggedUser}) => {
         return (
             <div className="ed-grid s-grid-1  lg-grid-3">
                 {   
-                    loggedUser.courses?
+                    loggedUser.courses && loggedUser.courses[0]!==""?
                         courses ?
                         courses.map(e => {
                             return Object.values(e).map( course =>
                                 loggedUser.courses.map( userCourses =>{
-                                    if( userCourses===course.id){
+                                    if( userCourses === course.id ){
                                         return(
                                             <CourseCard
                                             key={course.id}
@@ -37,8 +37,6 @@ const Courses = ({dashboard, home, courses, loggedUser}) => {
                     <p>Oops, aun no tienes cursos</p>
                 }
            </div>
-            
-            
     )
     }
 

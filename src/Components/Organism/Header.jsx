@@ -18,6 +18,8 @@ store.dispatch( getCourses() )
 
 const Header = ({loggedUser, removeloggeduser, cart, addcoursetocart}) => {
 
+    
+
     const [showRegister, setShowRegister] = useState(false)
     const [showLogin, setShowLogin] = useState(false)
     const [modal, setModal] = useState()
@@ -45,6 +47,7 @@ const Header = ({loggedUser, removeloggeduser, cart, addcoursetocart}) => {
         setCurrentUser(false)
         localStorage.removeItem("user")
         localStorage.removeItem("token")
+        
     }
 
    useEffect(()=>{
@@ -57,100 +60,77 @@ const Header = ({loggedUser, removeloggeduser, cart, addcoursetocart}) => {
 
     return (
         <>
-        <header className="main-header ">
-            <nav className="main-header__menu ed-grid gap-2 s-cross-center">
-                <Logo />
-                <div className="main-menu" ref={menu}>
-                    <ul className="main-menu-content menu-ed-grid ed-grid lg-cross-center">
-                        <div className="menu-items">
-                            <ul>
-                                <li className="list-item normal">
-                                    <NavLink to="/" exact >Inicio</NavLink>
-                                </li>
-                                <li className="list-item normal">
-                                    <NavLink to="/cursos">Cursos</NavLink>
-                                </li>
-                                <li className="list-item normal">
-                                    <NavLink to="/conocenos">Conocenos</NavLink>
-                                </li>
-                            </ul>
-                        </div>
-                        <div className="menu-login lg-main-end">
-                            <ul className="lg-cross-center">
-                                {
-                                    cart > 0 ?
-                                        <div className="cart-container">
-                                            <Link to="/cart" >
-                                                <img src={Cart} alt="cart"/>
-                                                <div className="cart-counter">
-                                                    <span className="t6"> {cart} </span>
-                                                </div>
-                                            </Link>
-                                        </div>
-                                    :
-                                    null
-                                }
-                                    {
-                                    loggedUser ?
-                                    <>
-                                        <div className="user-info s-mr-3"> 
-                                            <Link to="/dashboard">
-                                            <span className="t5 s-mr-1">{loggedUser.name}</span>  
-                                            <Avatar />
-                                            </Link>
-                                        </div>
-                                        <Button onClick={()=>logOut()} variant="outline-primary" size="sm">Salir</Button>
-                                        </>
-                                    :
-                                    <>
-                                    <li className="s-mb-2">
-                                        <div className="lg-mr-2 normal div-link" onClick={() => handleOpenLogin()} >Ingresar</div>
+        <header className="main-header">
+            <div className="ed-grid s-grid-2 header-container">
+                <nav className="main-header__menu ed-grid gap-2 s-cross-center">
+                    <Logo />
+                    <div className="main-menu" ref={menu}>
+                        <ul className="main-menu-content menu-ed-grid ed-grid lg-cross-center">
+                            <div className="menu-items">
+                                <ul>
+                                    <li className="list-item normal">
+                                        <NavLink to="/" exact >Inicio</NavLink>
                                     </li>
-                                    <li>
-                                        <Button 
-                                            variant="success" 
-                                            size="sm" 
-                                            className="s-px-1 s-py-1"
-                                            onClick={() => {handleOpenReg() 
-                                            handleCloseLogin()}}>
-                                            Registrar
-                                        </Button>
-                                    </li> 
-                                    </>
-                                }
-                                
-                                
-                            </ul>
-                        </div>
-                    </ul>
-                </div>
-                <div className="toggle-container">
-                {/* FUNCIONALIDAD EN PRUEBAS
-                
-                {  
-                loggedUser?
-                <span className="logged-toggle to-l" onClick={()=>toggle()}>
-                    
-                        {['left'].map(placement => (
-                            <OverlayTrigger
-                            key={placement}
-                            placement={placement}
-                            overlay={
-                                <Tooltip id={`tooltip-${placement}`}
-                                className="logged-tooltip">
-                                {loggedUser.name}
-                                </Tooltip>
+                                    <li className="list-item normal">
+                                        <NavLink to="/cursos">Cursos</NavLink>
+                                    </li>
+                                    <li className="list-item normal">
+                                        <NavLink to="/conocenos">Conocenos</NavLink>
+                                    </li>
+                                    <li className="list-item normal logout main">
+                                        <Button onClick={()=>logOut()} variant="link" size="sm">Salir</Button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </ul>
+                    </div>
+                </nav>
+                <nav className="ed-grid menu-login">
+                    <div className="menu-login container">
+                            {
+                                cart > 0 ?
+                                    <div className="cart-container">
+                                        <Link to="/cart" >
+                                            <img src={Cart} alt="cart"/>
+                                            <div className="cart-counter">
+                                                <span className="t6"> {cart} </span>
+                                            </div>
+                                        </Link>
+                                    </div>
+                                    
+                                :
+                                null
                             }
-                            >
-                            <img src={loggedUser.img} alt="avatar" />
-                            </OverlayTrigger>
-                        ))}
-                </span>
-                :null
-                } */}
-                <span className="menu-toggle to-l" onClick={()=>toggle()}></span>
-                </div>
-            </nav>
+                                {
+                                loggedUser ?
+                                <>
+                                    <div className="user-info s-mr-3"> 
+                                        <Link to="/dashboard">
+                                        <span className="t5 s-mr-1">{loggedUser.name}</span>  
+                                        <Avatar />
+                                        </Link>
+                                    </div>
+                                    <Button onClick={()=>logOut()} variant="outline-primary" size="sm" className="logout login">Salir</Button>
+                                    </>
+                                :
+                                <>
+                                    <div className="m-mr-2 s-mr-2 normal div-link" onClick={() => handleOpenLogin()} >Ingresar</div>
+                                    <Button 
+                                        variant="success" 
+                                        size="sm" 
+                                        className="m-px-1 m-py-1 s-mr-2 "
+                                        onClick={() => {handleOpenReg() 
+                                        handleCloseLogin()}}>
+                                        Registrar
+                                    </Button>
+                                </>
+                            }
+                        <div className="toggle-container">
+                            <span className="menu-toggle to-l" onClick={()=>toggle()}></span>
+                        </div>
+                    </div>
+                </nav>
+            </div>
         </header>
         
         <Modal 
@@ -179,6 +159,11 @@ const Header = ({loggedUser, removeloggeduser, cart, addcoursetocart}) => {
             </Modal.Header >
             <Modal.Body > 
                 <Register/> 
+                <div className="s-mt-3 s-mr-2 small s-main-end s-cross-end div-link primary" 
+                onClick={()=>{handleCloseReg()
+                                handleOpenLogin()}}>
+                    Ya tienes cuenta ? accede.
+                </div>
             </Modal.Body>
         </Modal>
         </>
@@ -207,3 +192,4 @@ const mapDispatchToProps = dispatch =>({
 
 
 export default connect(mapStateToProps, mapDispatchToProps )(  Header)
+

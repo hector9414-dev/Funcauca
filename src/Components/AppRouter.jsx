@@ -10,70 +10,97 @@ import Header from './Organism/Header'
 import * as firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/database'
-import { useEffect } from 'react';
-import { addLoggedUser, getCourses, addCourseToCart } from '../Redux/actionCreator'
+import { addLoggedUser, getCourses, flushCart } from '../Redux/actionCreator'
 import Dashboard from './Pages/Dashboard'
 import Private from './Routes/Private'
 import Profile from './Pages/Profile'
 import store from '../Redux/store'
 import Cart from './Pages/Cart'
+import Payment from './Pages/Payment'
+import { useEffect } from 'react'
+import Test from './Pages/Test'
 
 
 
-const AppRouter = ({addUser,getlocalCart}) => {
+const AppRouter = ({addUser, loggedUser, flushcart}) => {
+    
+        const coursesRef =firebase.database().ref("/Courses")
+        coursesRef.once("child_added")
+        .then( response =>{
+            localStorage.removeItem("courses")
+            store.dispatch( getCourses() )
 
-    useEffect(()=>{
+        })
 
-        const checkCoursesDataBase = async () =>{
-            const response = await firebase.database().ref("/Courses").once("value")
-            const coursesResponse = response.val()
-            if(JSON.stringify(coursesResponse) !== localStorage.getItem("courses")){
-                localStorage.removeItem("courses")
-                store.dispatch( getCourses() )
-            }
+        coursesRef.once("child_changed")
+        .then( response =>{
+            localStorage.removeItem("courses")
+            store.dispatch( getCourses() )
+            window.location.reload()
+
+        })
+
+
+        coursesRef.once("child_removed")
+        .then( response =>{
+            localStorage.removeItem("courses")
+            store.dispatch( getCourses() )
+            window.location.reload()
+
+        })
+
+        if(loggedUser){
+            const user = JSON.parse(localStorage.getItem("user"))
+            const userRef = firebase.database().ref(`/Users/${user.uid}`)
+            const coursesUserRef = firebase.database().ref(`/Users/${user.uid}/courses`)
+            userRef.once("child_changed")
+            .then(snapshot => {
+                console.log("change")
+                userRef.once("value")
+                .then(snapshot => {
+                    const userInfo = {...snapshot.val()}
+                    localStorage.setItem("user", JSON.stringify(userInfo))
+                    addUser(userInfo)
+                    window.location.reload()
+                })
+            })
+
+            coursesUserRef.once("child_changed")
+            .then(snapshot => flushcart())
+            
         }
         
-        checkCoursesDataBase()
+        
 
-        if(localStorage.getItem("user")){
-            addUser(JSON.parse(localStorage.getItem("user")))
-        }
-        else{
+        
+        useEffect(()=>{
 
-            firebase.auth().onAuthStateChanged(async response =>{
-                if(response){
-                    if(firebase.auth().currentUser.displayName){
-                        const uid = firebase.auth().currentUser.uid
-                        const token = await firebase.auth().currentUser.getIdToken()
-                        localStorage.setItem("token", JSON.stringify(token))
-                        const snapshot = await firebase.database().ref(`/Users/${uid}`).once("value")
-                        const data = snapshot.val()
-                        const {birthDate, city, country, courses, gender, idNumber, lastName, name} = data
 
-                        
+            if(localStorage.getItem("user")){
+                addUser(JSON.parse(localStorage.getItem("user")))
+                
+            }
+            else{
+                firebase.auth().onAuthStateChanged(async user =>{
+                    if(user && user.emailVerified){
+                        const {uid} = user
+                        const userRef = firebase.database().ref(`/Users/${uid}`)
+                        const dataResponse = await userRef.once("value")
+                        const userInfo = {...dataResponse.val()}
     
-                        const loggedUser ={
-                            birthDate,
-                            city,
-                            country,
-                            courses,
-                            gender,
-                            idNumber,
-                            lastName,
-                            name,
-                            uid,
-                            userToken: localStorage.setItem("token", JSON.stringify(token))
-                            
-                        }
-                            localStorage.setItem("user", JSON.stringify(loggedUser))
-                            addUser(loggedUser)
-                        
+                        localStorage.setItem("user", JSON.stringify(userInfo))
+                        addUser(userInfo)
                     }
-                }
-            })
-        }
-      }, [firebase.auth().currentUser])
-    
+                    else{
+                        firebase.auth().signOut()
+                        localStorage.removeItem("user")
+                    }
+                })
+            }
+
+           
+
+        },[])
 
 
     return(
@@ -89,6 +116,8 @@ const AppRouter = ({addUser,getlocalCart}) => {
                     <Private path="/dashboard" component = { Dashboard } />
                     <Private path="/editar-perfil" component = { Profile } />
                     <Route path="/cart" component = { Cart }/>
+                    <Route path="/checkout" component = { Payment }/>
+                    <Route path="/test/:courseId/:classId" component = { Test }/>
                     <Route component={()=><p>Error 404</p>} />
                 </Switch>
         </Router>
@@ -100,10 +129,17 @@ const mapDispatchToProps = dispatch =>({
     
     addUser(user){
         dispatch( addLoggedUser(user) )
+    },
+    flushcart(){
+        dispatch( flushCart() )
     }
 })
 
-const mapStateToProps = state => ({})
+const mapStateToProps = state => ({
+
+    loggedUser : state.userReducer.userLogged
+
+})
 
 
 export default connect(mapStateToProps, mapDispatchToProps )(AppRouter)

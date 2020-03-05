@@ -1,4 +1,5 @@
 @import '../../node_modules/react-datepicker/dist/react-datepicker.css';
+@import './bootstrap.min.css';
 @import '~ed-grid/ed-grid';
 @import '~edteam-style-guides/edteam-style-guides';
 
@@ -13,17 +14,28 @@
 .nav-list > li {
     text-align: center;
     transition: all .3s ease;
+    &:hover{
+        text-shadow: 0 0 1px rgb(122, 122, 122);
+    }
    
 }
 
 .main-menu .active {
     &.active{
-        color: rgba(65, 230, 100, 0.801);
+        color: rgb(44, 44, 44);
+        font-weight: 600;
+
+        @media screen and (max-width:1200px){
+            color: rgb(106, 209, 124);
+            font-weight: normal;
+        }
     }
 
     &.show{
         top:4.5rem !important;
     }
+
+    
     
 }
 
@@ -91,9 +103,13 @@ body{
     }
 }
 
-.main-header > .main-header__menu{
+.main-header {
+    
+    &> .main-header__menu{
     height: 100%;
+    }
 }
+
 
 .menu-ed-grid{
     grid-template-columns: max-content 1fr;
@@ -101,6 +117,10 @@ body{
 
 .main-header__menu{
     grid-template-columns: max-content 1fr;
+    height: 4rem;
+    @media screen and (max-width:1200px) {
+        height: 3rem;
+    }
     
 }
 
@@ -109,6 +129,43 @@ body{
         display: block !important;
         text-align: center;
         
+    }
+}
+
+.logout{
+    &.main{
+        display: none;
+        @media screen and (max-width: 1024px) {
+           display: list-item;
+        }
+    }
+
+    &.login{
+        display: block;
+        @media screen and (max-width: 1024px) {
+            display: none;
+        }
+    }
+}
+
+
+
+.menu-login{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 4rem;
+    color: rgb(44, 44, 44);
+    @media screen and (max-width:1200px) {
+        height: 3rem;
+    }
+    &.container{
+        & > .div-link{
+            &:hover{
+                text-shadow: 0 0 1px rgb(122, 122, 122);
+            }
+
+        }
     }
 }
 
@@ -138,6 +195,13 @@ body{
 
 .user-info{
     height: 2rem;
+    & > a {
+        color: rgb(31, 31, 31);
+        text-decoration: none;
+        &:hover{
+            text-shadow: 0 0 1px rgb(122, 122, 122);
+        }
+    }
 }
 
 .logged-toggle{
@@ -331,18 +395,19 @@ body{
     max-width: 1400px;
 }
 
+
 .content-panel{
     display: flex;
     position: relative;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: rgb(240, 240, 240);
+    background: rgb(245, 245, 245);
     color: rgb(66, 66, 66);
     padding: 2.5rem 1rem;
     border: none;
-    border-radius: 1rem;
-    box-shadow: 0 0 5px rgba(109, 109, 109, 0.438);
+    border-radius: .5rem;
+    box-shadow: 0 0 3px rgba(49, 49, 49, 0.438);
     top: -5rem;
     height: fit-content;
     width: calc(100% + 1rem);
@@ -353,8 +418,25 @@ body{
         box-shadow: none;
         background: none;
         top: -13rem;
+        @media screen and (max-width:1200px){
+            display: none;
+        }
+
+        &.small-card{
+            display:none;
+            @media screen and (max-width:1200px){
+                top: -1.5rem;
+                display: block;
+            }
+        }
+
     }
     
+}
+
+.country-flag{
+    height: 1rem;
+    margin-bottom: .2rem;
 }
 
 .dasboard-avatar-container{
@@ -395,6 +477,11 @@ body{
 .course-content{
     max-width: 1250px;
     color: #212221;
+
+    @media screen and (max-width:1200px){
+        margin: 0 .5rem;
+    }
+
 }
 
 .course-data{
@@ -540,9 +627,6 @@ body{
 }
 
 //Cart page
-.cart-items-container{
-    
-}
 
 .cart-card{
     background: #fdfdfe;
@@ -564,11 +648,32 @@ body{
     background: #f0f0ff;
 }
 
-//Day picker styles
-.react-datepicker-wrapper{
-    
+//Pagina de transaccion
+.tx-container{
+    border: 1px solid black;
+    margin-top: 1.5rem;
+    padding: 1rem 2rem ;
+    overflow-wrap: break-word;
 }
 
+.tx-item{
+    margin: 0;
+    padding: 0;
+    color: rgb(32, 32, 32);
+    margin-bottom: 1rem;
+    font-size: .9rem;
+    &:last-child{
+        font-weight: bold;
+    }
+}
+
+.main-logo.tx-logo{
+    width: 8rem;
+    height: auto;
+    margin-bottom: 1rem;
+}
+
+//Day picker styles
 .react-datepicker__input-container{
     border: none;
     &>input{
