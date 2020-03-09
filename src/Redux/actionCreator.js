@@ -68,10 +68,9 @@ const addCourseToCart = courseId => dispatch =>{
 
 const removeCourseFromCart = courseId => dispatch =>{
 
-    const tempCart = JSON.parse(localStorage.getItem("cart"))
+    const tempCart = [JSON.parse(localStorage.getItem("cart"))]
     const newCart = tempCart.filter(course => course !==courseId)
     localStorage.setItem("cart", JSON.stringify(newCart))
-    
     return dispatch({
         type: REMOVE_COURSE_FROM_CART,
         courseId

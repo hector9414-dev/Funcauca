@@ -19,6 +19,7 @@ import Cart from './Pages/Cart'
 import Payment from './Pages/Payment'
 import { useEffect } from 'react'
 import Test from './Pages/Test'
+import Checker from './Routes/Checker'
 
 
 
@@ -29,7 +30,6 @@ const AppRouter = ({addUser, loggedUser, flushcart}) => {
         .then( response =>{
             localStorage.removeItem("courses")
             store.dispatch( getCourses() )
-
         })
 
         coursesRef.once("child_changed")
@@ -116,13 +116,14 @@ const AppRouter = ({addUser, loggedUser, flushcart}) => {
                     <Private path="/dashboard" component = { Dashboard } />
                     <Private path="/editar-perfil" component = { Profile } />
                     <Route path="/cart" component = { Cart }/>
-                    <Route path="/checkout" component = { Payment }/>
-                    <Route path="/test/:courseId/:classId" component = { Test }/>
+                    <Private path="/checkout" component = { Payment }/>
+                    <Private path="/test/:courseId/:classId" component = { Test }/>
                     <Route component={()=><p>Error 404</p>} />
                 </Switch>
         </Router>
     )
     }
+    
 
 
 const mapDispatchToProps = dispatch =>({

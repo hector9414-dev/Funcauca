@@ -6,11 +6,11 @@ import { connect } from 'react-redux';
 
 const Home = ({loggedUser}) => {
         return (
-            <>
+            <main>
             <Banner className="s-mb-4" home />
             <div className="l-block bigger strong s-main-center s-pt-3">Nuestros Cursos</div>
             <Courses home/>
-            </>
+            </main>
         )
 }
 

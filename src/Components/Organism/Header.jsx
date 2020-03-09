@@ -22,19 +22,14 @@ const Header = ({loggedUser, removeloggeduser, cart, addcoursetocart}) => {
 
     const [showRegister, setShowRegister] = useState(false)
     const [showLogin, setShowLogin] = useState(false)
-    const [modal, setModal] = useState()
-    
-    const [regOk, showregisteredOk] = useState(false)
     const [currentUser, setCurrentUser] = useState(false)
     const menu = createRef()
 
     const handleOpenReg = () =>{
         setShowRegister(true) 
-        setModal("reg")
     }
     const handleCloseReg = () =>{
         setShowRegister(false)
-        showregisteredOk(false)
     }
     const handleOpenLogin = ()=>{setShowLogin(true)}
     const handleCloseLogin = ()=>{setShowLogin(false)}
@@ -66,7 +61,6 @@ const Header = ({loggedUser, removeloggeduser, cart, addcoursetocart}) => {
                     <Logo />
                     <div className="main-menu" ref={menu}>
                         <ul className="main-menu-content menu-ed-grid ed-grid lg-cross-center">
-                            <div className="menu-items">
                                 <ul>
                                     <li className="list-item normal">
                                         <NavLink to="/" exact >Inicio</NavLink>
@@ -81,7 +75,6 @@ const Header = ({loggedUser, removeloggeduser, cart, addcoursetocart}) => {
                                         <Button onClick={()=>logOut()} variant="link" size="sm">Salir</Button>
                                     </li>
                                 </ul>
-                            </div>
                         </ul>
                     </div>
                 </nav>
@@ -106,7 +99,7 @@ const Header = ({loggedUser, removeloggeduser, cart, addcoursetocart}) => {
                                 <>
                                     <div className="user-info s-mr-3"> 
                                         <Link to="/dashboard">
-                                        <span className="t5 s-mr-1">{loggedUser.name}</span>  
+                                        <span className="t5 s-mr-1 user-name">{loggedUser.name}</span>  
                                         <Avatar />
                                         </Link>
                                     </div>
@@ -118,7 +111,7 @@ const Header = ({loggedUser, removeloggeduser, cart, addcoursetocart}) => {
                                     <Button 
                                         variant="success" 
                                         size="sm" 
-                                        className="m-px-1 m-py-1 s-mr-2 "
+                                        className="m-px-1 m-py-1 s-mr-2 green-button"
                                         onClick={() => {handleOpenReg() 
                                         handleCloseLogin()}}>
                                         Registrar

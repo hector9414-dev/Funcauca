@@ -55,7 +55,7 @@ const Payment = ({flushcart}) => {
     })
 
     return (
-                <div className="m-30 m-to-center tx-container">
+                <main className="m-50 m-to-center l-30 tx-container">
                 {
                 sign === signature ?
                 <>
@@ -102,7 +102,7 @@ const Payment = ({flushcart}) => {
                 :
                 window.location.assign("/")
                 }
-                </div>
+                </main>
     )
 }
 

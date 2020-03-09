@@ -1,0 +1,53 @@
+[debug] [2020-03-09T15:55:48.632Z] ----------------------------------------------------------------------
+[debug] [2020-03-09T15:55:48.634Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\hecto\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start
+[debug] [2020-03-09T15:55:48.634Z] CLI Version:   7.14.0
+[debug] [2020-03-09T15:55:48.634Z] Platform:      win32
+[debug] [2020-03-09T15:55:48.634Z] Node Version:  v13.6.0
+[debug] [2020-03-09T15:55:48.635Z] Time:          Mon Mar 09 2020 10:55:48 GMT-0500 (Colombia Standard Time)
+[debug] [2020-03-09T15:55:48.636Z] ----------------------------------------------------------------------
+[debug] [2020-03-09T15:55:48.636Z] 
+[debug] [2020-03-09T15:55:48.642Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-03-09T15:55:48.643Z] > authorizing via signed-in user
+[info] i  emulators: Starting emulators: functions, hosting
+[debug] [2020-03-09T15:55:50.683Z] [hub] writing locator at C:\Users\hecto\AppData\Local\Temp\hub-funcaucaedu-eb0cf.json
+[info] +  hub: emulator hub started at http://localhost:4400
+[warn] !  Your requested "node" version "8" doesn't match your global version "13"
+[info] +  functions: functions emulator started at http://localhost:5001
+[debug] [2020-03-09T15:55:54.714Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/funcaucaedu-eb0cf/webApps/-/config  
+ 
+[debug] [2020-03-09T15:55:56.114Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: build
+[info] +  hosting: Local server: http://localhost:5000
+[info] +  hosting: hosting emulator started at http://localhost:5000
+[info] i  functions: Watching "D:\Mis proyectos\funcaucaedu\functions" for Cloud Functions...
+[debug] [2020-03-09T15:55:56.159Z] [worker-pool] addWorker(~diagnostic~)
+[debug] [2020-03-09T15:55:56.160Z] [worker-pool] Adding worker with key ~diagnostic~, total=1
+[debug] [2020-03-09T15:55:56.160Z] [worker-pool] submitWork(triggerId=)
+[debug] [2020-03-09T15:55:56.160Z] [worker-~diagnostic~-42e6d655-4342-4b5e-a815-50705ad99750]: Assigning socketPath: \\?\pipe\D:\Mis proyectos\funcaucaedu\functions\35052
+[debug] [2020-03-09T15:55:56.160Z] [worker-~diagnostic~-42e6d655-4342-4b5e-a815-50705ad99750]: BUSY
+[debug] [2020-03-09T15:55:56.512Z] [runtime-status] [35052] Functions runtime initialized. {"cwd":"D:\\Mis proyectos\\funcaucaedu\\functions","node_version":"13.6.0"}
+[debug] [2020-03-09T15:55:56.513Z] [runtime-status] [35052] Disabled runtime features: undefined
+[debug] [2020-03-09T15:55:56.516Z] [runtime-status] [35052] Resolved module firebase-admin {"declared":true,"installed":true,"version":"8.9.2","resolution":"D:\\Mis proyectos\\funcaucaedu\\functions\\node_modules\\firebase-admin\\lib\\index.js"}
+[debug] [2020-03-09T15:55:56.517Z] [runtime-status] [35052] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.3.0","resolution":"D:\\Mis proyectos\\funcaucaedu\\functions\\node_modules\\firebase-functions\\lib\\index.js"}
+[warn] !  functions: Your GOOGLE_APPLICATION_CREDENTIALS environment variable points to "D:\Mis proyectos\funcaucaedu\functions\funcaucaedu-eb0cf-9d21e22b2693.json". Non-emulated services will access production using these credentials. Be careful!
+[debug] [2020-03-09T15:55:56.756Z] [runtime-status] [35052] Found google-gax at D:\Mis proyectos\funcaucaedu\functions\node_modules\google-gax\build\src\index.js
+[debug] [2020-03-09T15:55:56.756Z] [runtime-status] [35052] Outgoing network have been stubbed. [{"name":"http","status":"mocked"},{"name":"http","status":"mocked"},{"name":"https","status":"mocked"},{"name":"https","status":"mocked"},{"name":"net","status":"mocked"},{"name":"google-gax","status":"mocked"}]
+[debug] [2020-03-09T15:55:56.799Z] [runtime-status] [35052] Checked functions.config() {"config":{}}
+[debug] [2020-03-09T15:55:56.800Z] [runtime-status] [35052] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.3.0","resolution":"D:\\Mis proyectos\\funcaucaedu\\functions\\node_modules\\firebase-functions\\lib\\index.js"}
+[debug] [2020-03-09T15:55:56.801Z] [runtime-status] [35052] Resolved module firebase-admin {"declared":true,"installed":true,"version":"8.9.2","resolution":"D:\\Mis proyectos\\funcaucaedu\\functions\\node_modules\\firebase-admin\\lib\\index.js"}
+[debug] [2020-03-09T15:55:56.801Z] [runtime-status] [35052] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.3.0","resolution":"D:\\Mis proyectos\\funcaucaedu\\functions\\node_modules\\firebase-functions\\lib\\index.js"}
+[debug] [2020-03-09T15:55:56.861Z] [runtime-status] [35052] firebase-admin has been stubbed. {"adminResolution":{"declared":true,"installed":true,"version":"8.9.2","resolution":"D:\\Mis proyectos\\funcaucaedu\\functions\\node_modules\\firebase-admin\\lib\\index.js"}}
+[warn] !  Error: Failed to read credentials from file "D:\Mis proyectos\funcaucaedu\functions\funcaucaedu-eb0cf-9d21e22b2693.json": Error: ENOENT: no such file or directory, open '"D:\Mis proyectos\funcaucaedu\functions\funcaucaedu-eb0cf-9d21e22b2693.json"'
+    at FirebaseAppError.FirebaseError [as constructor] (D:\Mis proyectos\funcaucaedu\functions\node_modules\firebase-admin\lib\utils\error.js:42:28)
+    at FirebaseAppError.PrefixedFirebaseError [as constructor] (D:\Mis proyectos\funcaucaedu\functions\node_modules\firebase-admin\lib\utils\error.js:88:28)
+    at new FirebaseAppError (D:\Mis proyectos\funcaucaedu\functions\node_modules\firebase-admin\lib\utils\error.js:123:28)
+    at readCredentialFile (D:\Mis proyectos\funcaucaedu\functions\node_modules\firebase-admin\lib\auth\credential.js:381:15)
+    at credentialFromFile (D:\Mis proyectos\funcaucaedu\functions\node_modules\firebase-admin\lib\auth\credential.js:360:27)
+    at Object.getApplicationDefault (D:\Mis proyectos\funcaucaedu\functions\node_modules\firebase-admin\lib\auth\credential.js:279:16)
+    at new FirebaseApp (D:\Mis proyectos\funcaucaedu\functions\node_modules\firebase-admin\lib\firebase-app.js:194:53)
+    at FirebaseNamespaceInternals.initializeApp (D:\Mis proyectos\funcaucaedu\functions\node_modules\firebase-admin\lib\firebase-namespace.js:80:19)
+    at FirebaseNamespace.initializeApp (D:\Mis proyectos\funcaucaedu\functions\node_modules\firebase-admin\lib\firebase-namespace.js:408:30)
+    at Proxy.<anonymous> (C:\Users\hecto\AppData\Roaming\npm\node_modules\firebase-tools\lib\emulator\functionsEmulatorRuntime.js:338:72)
+[warn] !  We were unable to load your functions code. (see above)
+[debug] [2020-03-09T15:55:56.893Z] [worker-~diagnostic~-42e6d655-4342-4b5e-a815-50705ad99750]: exited
+[debug] [2020-03-09T15:55:56.894Z] [worker-~diagnostic~-42e6d655-4342-4b5e-a815-50705ad99750]: FINISHED

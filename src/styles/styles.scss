@@ -132,17 +132,33 @@ body{
     }
 }
 
+.user-name{
+    display: inline;
+    @media screen and (max-width: 640px) {
+        display: none;
+        
+    }
+}
+
+.green-button{
+    background:rgb(28, 110, 47);
+    border: none;
+    &:hover{
+        background:rgb(43, 163, 71);
+    }
+}
+
 .logout{
     &.main{
         display: none;
-        @media screen and (max-width: 1024px) {
+        @media screen and (max-width: 640px) {
            display: list-item;
         }
     }
 
     &.login{
         display: block;
-        @media screen and (max-width: 1024px) {
+        @media screen and (max-width: 1200px) {
             display: none;
         }
     }
@@ -418,13 +434,13 @@ body{
         box-shadow: none;
         background: none;
         top: -13rem;
-        @media screen and (max-width:1200px){
+        @media screen and (max-width:1024px){
             display: none;
         }
 
         &.small-card{
             display:none;
-            @media screen and (max-width:1200px){
+            @media screen and (max-width:1024px){
                 top: -1.5rem;
                 display: block;
             }
@@ -478,7 +494,7 @@ body{
     max-width: 1250px;
     color: #212221;
 
-    @media screen and (max-width:1200px){
+    @media screen and (max-width:1024px){
         margin: 0 .5rem;
     }
 

@@ -10,7 +10,7 @@ const Courses = ({dashboard, home, courses, loggedUser}) => {
 
     if(dashboard){
         return (
-            <div className="ed-grid s-grid-1  lg-grid-3">
+            <main className="ed-grid s-grid-1  lg-grid-3">
                 {   
                     loggedUser.courses && loggedUser.courses[0]!==""?
                         courses ?
@@ -36,7 +36,7 @@ const Courses = ({dashboard, home, courses, loggedUser}) => {
                     :
                     <p>Oops, aun no tienes cursos</p>
                 }
-           </div>
+           </main>
     )
     }
 

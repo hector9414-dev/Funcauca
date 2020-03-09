@@ -48,7 +48,7 @@ const Course = ({match, coursesList, loggedUser, addcoursetocart, cart}) => {
     }, [locked])
 
     return (
-        <div>
+        <main>
             <Banner course title={matchedCourse.title}
                 description={matchedCourse.description}
                 color={"#212221"}
@@ -226,7 +226,7 @@ const Course = ({match, coursesList, loggedUser, addcoursetocart, cart}) => {
                     </Card>
                     </div>
                 </div>
-        </div>
+        </main>
     )
 }
 

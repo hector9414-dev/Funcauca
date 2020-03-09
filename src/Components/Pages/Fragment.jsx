@@ -2,16 +2,25 @@ import React from 'react'
 import Vimeo from '@u-wave/react-vimeo';
 import { Accordion, Card } from 'react-bootstrap'
 import { connect } from 'react-redux'
-import { NavLink, Link } from 'react-router-dom'
+import { NavLink, Link, } from 'react-router-dom'
 import Whitecheck from '../../img/white-check.png'
+import * as firebase from 'firebase/app'
 
 
 const Fragment = ({match, courses}) => {
+
 
     let actualSection = {}
     let matchedCourse = {}
     let actualClass = {}
     const {courseId, classId, videoId } = match.params
+    const user =  JSON.parse(localStorage.getItem("user")) 
+    firebase.database().ref(`/Users/${user.uid}/courses`).once("value")
+    .then(snapshot => {
+        if(!snapshot.val().includes(courseId)){
+            window.location.assign("/cursos")
+        }
+    })
     const actualCourse = (courses.map(e => { return (Object.values(e).filter( course => course.id === courseId )) }))
 
     actualCourse.map(course =>(Object.values(course).map(e => matchedCourse = e)))   
@@ -24,9 +33,16 @@ const Fragment = ({match, courses}) => {
     if(actualSection.classes){
         actualSection.classes.filter( classes => classes.id === videoId).map(classes => actualClass = classes)
     }
+    
+
+    
+
+
+
+    
 
     return (
-        <div className="page-body s-pt-4">
+        <main className="page-body s-pt-4">
         <div className="ed-grid class-grid lg-grid-6 s-pt-2">
             <div className="lg-cols-4">
                 <Vimeo
@@ -46,7 +62,7 @@ const Fragment = ({match, courses}) => {
                     <p>Cargando</p>
                 }
             </div>
-            <div className="lg-cols-2 class-container">
+            <aside className="lg-cols-2 class-container">
                 <Accordion defaultActiveKey={classId} >
                     {
                         content ?
@@ -86,9 +102,9 @@ const Fragment = ({match, courses}) => {
                         <p>Cargando</p>
                     }
                 </Accordion>
-            </div>
+            </aside>
         </div>
-        </div>
+        </main>
     )
 }
 

@@ -5,14 +5,16 @@ import { removeCourseFromCart } from '../../Redux/actionCreator'
 
 const CartCard = ({img,title,price,teacher,id, removecoursefromcart}) => {
     return (
-        <div className="ed-grid lg-grid-4 lg-cols-3 cart-card">
-            <img src={img} alt={title} />
-            <div className="lg-cols-2">
+        <div className="ed-grid m-grid-4 m-cols-3 cart-card">
+            <img src={img} alt={title} className="s-mb-2"/>
+            <div className="ed-grid s-grid-2 m-cols-3 ">
+                <div>
                 <p className="t3 s-mb-0"> {title} </p>
                 <p className="small s-mb-2"> {`Profesor ${teacher}`} </p>
-                <Button variant={"link"} size="sm" className="s-px-0 s-py-0" onClick={()=>removecoursefromcart(id)} >Eliminar</Button>
+                </div>
+                <p className="t3 s-to-right"> {`${price/1000}.000 COP`} </p>
+                <Button variant={"link"} size="sm" className="s-px-0 s-py-0 s-to-left" onClick={()=>removecoursefromcart(id)} >Eliminar</Button>
             </div>
-            <p className="t3"> {`${price} COP`} </p>
         </div>
     )
 }

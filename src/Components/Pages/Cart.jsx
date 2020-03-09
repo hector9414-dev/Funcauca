@@ -1,12 +1,19 @@
 import React from 'react'
 import CartCard from '../Organism/CartCard'
 import {connect} from 'react-redux'
-import { Button } from 'react-bootstrap'
+import { Button, Modal } from 'react-bootstrap'
 import { flushCart } from '../../Redux/actionCreator'
 import md5 from 'md5'
 import { useState } from 'react'
 import { createRef } from 'react'
 import { useEffect } from 'react'
+import PayULogo from '../../img/PayU_180x100_Paga.png'
+import SupportedCo from '../../img/PayU_CO.png'
+import * as firebase from 'firebase/app'
+import Register from '../Pages/Register'
+import Login from '../Pages/Login'
+
+
 
 const Cart = ({courses, cart, flushcart, loggedUser}) => {
 
@@ -14,6 +21,19 @@ const Cart = ({courses, cart, flushcart, loggedUser}) => {
     let stringSum
     const [signature, setSignature] = useState()
     const [reference, setReference] = useState()
+
+    const [showRegister, setShowRegister] = useState(false)
+    const [showLogin, setShowLogin] = useState(false)
+
+    const handleOpenReg = () =>{
+        setShowRegister(true) 
+    }
+    const handleCloseReg = () =>{
+        setShowRegister(false)
+    }
+    const handleOpenLogin = ()=>{setShowLogin(true)}
+    const handleCloseLogin = ()=>{setShowLogin(false)}
+
     const cartId = []
     const formRef = createRef()
 
@@ -23,7 +43,12 @@ const Cart = ({courses, cart, flushcart, loggedUser}) => {
     // const merchantid = "838626"
 
     const submit = e =>{
-        formRef.current.submit()
+        if(firebase.auth().currentUser){
+            formRef.current.submit()
+        }
+        else{
+            setShowLogin(true)
+        }
     }
    
     const courseSum = price =>{
@@ -33,29 +58,29 @@ const Cart = ({courses, cart, flushcart, loggedUser}) => {
     }
     
     const getReference = () =>{
+        const today = new Date()
         if(loggedUser){
             Object.values(cart).map( id => cartId.push(id))
             const cartToString = cartId.toString()
-            let refString = `${loggedUser.uid}${cartToString}`
+            let refString = `${loggedUser.uid}-${today.getTime()}-${cartToString}`
                 refString = refString.replace(",","")
+                const hash = `${apikeytest}~${merchantidtest}~${refString}~${sum}~COP`
+                const sign = md5(hash)
+                setSignature(sign)
                 setReference(refString)
+                
         }
+        
+
     }
     
-    const toMd5 = e =>{
-        const hash = `${apikeytest}~${merchantidtest}~${reference}~${sum}~COP`
-        const sign = md5(hash)
-        setSignature(sign)
-    }
-
 
     useEffect(()=>{
         getReference()
-        toMd5()
-    },[cart, loggedUser, reference])
+    },[loggedUser,cart])
 
     return (
-        <div className="ed-container s-pt-4 s-main-center">
+        <main className="ed-container s-pt-4 s-main-center">
             <h2 className="s-mb-4">Carrito de compras</h2>
             {
                 cart.length > 0?
@@ -87,7 +112,7 @@ const Cart = ({courses, cart, flushcart, loggedUser}) => {
                     <div>
                         <Button variant="link" onClick={()=>flushcart()}>Vaciar carrito</Button>
                     </div>
-                    <p className="s-to-right s-mb-0 t3"> {`Total  ${stringSum} COP`} </p>
+                    <p className="s-to-right s-mb-0 t3"><span className="s-mr-1">Total</span> {`${stringSum/1000}.000 COP`} </p>
                 </section>
                 </div>
                 <div className="lg-cols-2">
@@ -107,6 +132,8 @@ const Cart = ({courses, cart, flushcart, loggedUser}) => {
                     <input name="confirmationUrl" hidden readOnly value="https://us-central1-funcaucaedu-eb0cf.cloudfunctions.net/setPaymentInfo" />
                     <input name="Submit"     type="submit"  value="Enviar" />
                 </form> */}
+                
+
 
                 <form method="post" action="https://sandbox.checkout.payulatam.com/ppp-web-gateway-payu/" ref={formRef}>
                 <input name="merchantId"    type="hidden"  value={merchantidtest}   />
@@ -127,19 +154,63 @@ const Cart = ({courses, cart, flushcart, loggedUser}) => {
                 }
                 <input name="extra2"    type="hidden"  value={JSON.stringify(cart)} />
                 <input name="buyerEmail"    type="hidden"  value="prueba@test.com" />
-                <input name="responseUrl"    type="hidden"  value="https://app.funcaucaedu.com/checkout" />
-                {/* <input name="confirmationUrl"    type="hidden"  value="http://localhost:3000/checkout" /> */}
+                <input name="responseUrl"    type="hidden"  value="http://localhost:3000/checkout" />
                 <input name="confirmationUrl"    type="hidden"  value="https://us-central1-funcaucaedu-eb0cf.cloudfunctions.net/setPaymentInfo" />
-                <input name="Submit"        type="button"  value="Pagar"onClick={()=> submit()}  />
                 </form>
+                <div className="m-mt-4 m-75 s-65 s-to-center">
+                <img src={PayULogo} alt="PayU" className="m-mb-3"/>
+                <Button type="button" block onClick={()=> submit()} className="s-mb-2 s-py-1 big ">Pagar</Button>
+                <p className="smaller s-mb-0">Medios de pago aceptados:</p>
+                <img src={SupportedCo} alt="PayU" className="m-mb-3"/>
+                </div>
+                
                 </div>
             </div>
             :
             <div className="ed-container">
                 <h2 className="lg-cols-5">Tu carrito esta vacio...</h2>
+                {
+                    window.location.assign("/cursos")
+                    
+                }
             </div>
             }
-        </div>
+
+<Modal 
+            show={showLogin} 
+            onHide={handleCloseLogin}
+            dialogClassName="modal-90w">
+            <Modal.Header closeButton>
+                Iniciar Sesión
+            </Modal.Header>
+            <Modal.Body >
+                <Login/> 
+                <div className="s-mt-3 s-mr-2 small s-main-end s-cross-end div-link primary" 
+                onClick={()=>{handleOpenReg()
+                            handleCloseLogin()}}>
+                    Aun sin cuenta, registrate
+                </div> 
+            </Modal.Body>
+        </Modal>
+
+        <Modal 
+            show={showRegister} 
+            onHide={handleCloseReg}
+            dialogClassName="modal-90w">
+            <Modal.Header  closeButton>
+                Formulario de Registro
+            </Modal.Header >
+            <Modal.Body > 
+                <Register/> 
+                <div className="s-mt-3 s-mr-2 small s-main-end s-cross-end div-link primary" 
+                onClick={()=>{handleCloseReg()
+                                handleOpenLogin()}}>
+                    Ya tienes cuenta ? accede.
+                </div>
+            </Modal.Body>
+        </Modal>
+        
+        </main>
     )
 }
 

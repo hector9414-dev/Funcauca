@@ -42,7 +42,7 @@ const Dashboard = ({loggedUser}) => {
     },[flagUrl])
 
     return (
-        <>
+        <main>
         <Banner 
             height={"15rem"} 
             color={"transparent"} 
@@ -53,7 +53,7 @@ const Dashboard = ({loggedUser}) => {
         {loggedUser ?
             <div className="page-body dashboard s-mt-4 s-pt-4">
                     <div className="ed-grid lg-grid-12 gap-2 dashboard-container" >
-                    <div className="content-panel lg-cols-2" >
+                    <aside className="content-panel lg-cols-2" >
                         <div className="dasboard-avatar-container">
                         <Avatar />
                         </div>
@@ -77,7 +77,7 @@ const Dashboard = ({loggedUser}) => {
                                         Editar perfil
                                 </Button>
                             </Link>
-                    </div>
+                    </aside>
                     <div className="courses-panel lg-cols-8 s-mt-4 lg-mt-0 ">
                         <p className="t2 s-mb-4 center">Mis cursos</p>
                         <Courses dashboard />
@@ -99,7 +99,7 @@ const Dashboard = ({loggedUser}) => {
             <p>cargando</p>            
         }
         
-        </>
+        </main>
     )
 }
 
