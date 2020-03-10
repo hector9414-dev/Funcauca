@@ -4,13 +4,10 @@ import * as firebase from "firebase/app"
 import "firebase/auth";
 import "firebase/database";
 import { useState } from 'react';
-import { connect } from 'react-redux';
-import { addLoggedUser } from '../../Redux/actionCreator';
 
 
-
-const Login = () => {
-
+const AdminLogin = () => {
+    localStorage.clear()
     const email = createRef()
     const password = createRef()
     const [toast, showToast] = useState(false)    
@@ -19,7 +16,7 @@ const Login = () => {
     const [asyncResponse, setasyncResponse] = useState() 
 
     const login = async e =>{
-
+        
         e.preventDefault()
         setasyncResponse(true)
          firebase.auth().signInWithEmailAndPassword(email.current.value, password.current.value).catch(error => {
@@ -30,27 +27,39 @@ const Login = () => {
             showToast(true)
           })
           .then( user =>{
-            if(user){
-                if(!user.user.emailVerified){
-                    firebase.auth().signOut()
-                    setToastTitle("Oops, error")
-                    setToastMessage("Debes verificar tu cuenta primero")
-                    showToast(true)
-                    setasyncResponse(false)
-                }
-                else{
-                user.user.getIdToken()
-                .then( token => localStorage.setItem("token", JSON.stringify(token)))
-                window.location.reload()
-                }
-            }
+           const {uid,email,displayName} = user.user
+           
+
+           const userInfo={
+               displayName,
+               email,
+               uid
+           }
+
+           localStorage.setItem("admin",userInfo)
+
+           firebase.database().ref(`/Users/${uid}/rol`).once("value")
+           .then( rol =>{
+               if(rol.val()==="admin"){
+                   setasyncResponse(false)
+                   window.location.assign("/adminDashboard")
+               }
+               else{
+                   firebase.auth().signOut()
+                   localStorage.clear()
+                   window.location.assign("/")
+                   
+               }
+           })
+           
           })
     }
 
     
 
     return (
-        <main>
+        <main className="m-30 s-to-center s-pt-4">
+        <h1 className="center">Modulo Administrativo</h1>
         <Form className="s-mb-1">
         <Form.Group controlId="formBasicEmail">
             <Form.Label className="t4">Correo Electronico</Form.Label>
@@ -85,5 +94,4 @@ const Login = () => {
     )
 }
 
-
-export default (Login)
+export default AdminLogin

@@ -13,18 +13,14 @@ const Course = ({match, coursesList, loggedUser, addcoursetocart, cart}) => {
 
     const [courseLocked, setCourseLocked] = useState(true)    
 
+
+    const matchedCourse = coursesList[`course${match.params.id}`]
+
+    const {content} = matchedCourse
+
+    
+
     let locked 
-    let matchedCourse = {}
-    let price = 0
-
-    if(coursesList){
-        const actualCourse = (coursesList.map(e => { return (Object.values(e).filter( course => course.id === match.params.id )) }))
-        actualCourse.map(course =>(Object.values(course).map(e => matchedCourse = e))) 
-    }
-
-    if(matchedCourse.price >= 1000 ){
-        price = `${matchedCourse.price/1000}.000`
-    }
 
     if(loggedUser){
         if(loggedUser.courses){
@@ -73,7 +69,7 @@ const Course = ({match, coursesList, loggedUser, addcoursetocart, cart}) => {
                         <Card.Text className="s-mb-1 lg-mb-2 center t3">
                         {
                             matchedCourse?
-                            <span>{price} COP</span>
+                            <span>{matchedCourse.price/1000}.000 COP</span>
                             :
                             <Spinner animation="grow" variant="success" />
 
@@ -122,30 +118,36 @@ const Course = ({match, coursesList, loggedUser, addcoursetocart, cart}) => {
                     <div className="content-container lg-cols-6 s-pl-2 s-mt-2 m-mt-4 lg-mt-0 "> 
                         <p className="t2 s-center left m-mb-4 s-pl-0 ">Contenido del curso</p>
                         {
-                            matchedCourse.content?
-                            matchedCourse.content.map( seccion => {
-                                
+                            content?
+                            
+                            Object.keys(content).map( actualSectionkey => {
+                                const actualSection= content[actualSectionkey]
+                                const {classes} = actualSection
                                 return(
-                                    <ListGroup  className="s-mb-2" key={seccion.id}>
+                                    <ListGroup  className="s-mb-2" key={actualSection.id}>
                                         <ListGroup.Item className="classes-group" disabled={courseLocked}>
-                                            <span className="strong section-title" > {seccion.title}</span> 
+                                            <span className="strong section-title" > {actualSection.title}</span> 
                                             {
-                                            seccion.classes.map( classes => 
-                                                    <div className="class-title" key={classes.id}>
-                                                        <Link to={`/class/${matchedCourse.id}/${seccion.id}/${classes.id}`}
-                                                        className="class-link"
-                                                        >
-                                                            {
-                                                                courseLocked ?
-                                                                <img src={Locked} alt="" width="15px" className="s-mr-1"/>
-                                                                :
-                                                                <img src={Check} alt="" width="15px" className="s-mr-1"/>
-                                                            }
-                                                            <span>{classes.name}</span> 
-                                                        </Link>
-                                                    </div>
+                                            Object.keys(classes).map( actualClasskey => { 
+                                                const actualClass = classes[actualClasskey]
+                                                return(
+                                                        <div className="class-title" key={actualClass.id}>
+                                                            <Link to={`/class/${matchedCourse.id}/${actualSection.id}/${actualClass.id}`}
+                                                            className="class-link"
+                                                            >
+                                                                {
+                                                                    courseLocked ?
+                                                                    <img src={Locked} alt="" width="15px" className="s-mr-1"/>
+                                                                    :
+                                                                    <img src={Check} alt="" width="15px" className="s-mr-1"/>
+                                                                }
+                                                                <span>{actualClass.name}</span> 
+                                                            </Link>
+                                                        </div>
+                                                            
                                                         )
-                                                    }
+                                                    })
+                                            }
                                        </ListGroup.Item>
                                     </ListGroup>
                                 
@@ -153,7 +155,7 @@ const Course = ({match, coursesList, loggedUser, addcoursetocart, cart}) => {
                                 )
                                 
                                 
-                                })
+                            })
                             :
                             <Spinner animation="grow" variant="success" />
     
@@ -179,7 +181,7 @@ const Course = ({match, coursesList, loggedUser, addcoursetocart, cart}) => {
                         <Card.Text className="s-mb-1 lg-mb-2 center t3">
                         {
                             matchedCourse?
-                            <span>{price} COP</span>
+                            <span>{matchedCourse.price/1000}.000 COP</span>
                             :
                             <Spinner animation="grow" variant="success" />
 

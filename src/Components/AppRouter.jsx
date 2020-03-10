@@ -19,7 +19,8 @@ import Cart from './Pages/Cart'
 import Payment from './Pages/Payment'
 import { useEffect } from 'react'
 import Test from './Pages/Test'
-import Checker from './Routes/Checker'
+import AdminLogin from './Pages/AdminLogin'
+import AdminDashboard from './Pages/AdminDashboard'
 
 
 
@@ -87,7 +88,7 @@ const AppRouter = ({addUser, loggedUser, flushcart}) => {
                         const userRef = firebase.database().ref(`/Users/${uid}`)
                         const dataResponse = await userRef.once("value")
                         const userInfo = {...dataResponse.val()}
-    
+                        console.log(userInfo)
                         localStorage.setItem("user", JSON.stringify(userInfo))
                         addUser(userInfo)
                     }
@@ -112,12 +113,14 @@ const AppRouter = ({addUser, loggedUser, flushcart}) => {
                     <Route path="/cursos" component = { Courses }/>
                     <Route path="/conocenos" component = { AboutUs }/>
                     <Route path="/curso/:id" component = { Course }/>
-                    <Private path="/class/:courseId/:classId/:videoId" component  = { Fragment } />
+                    <Private path="/class/:courseId/:sectionId/:classId" component  = { Fragment } />
                     <Private path="/dashboard" component = { Dashboard } />
                     <Private path="/editar-perfil" component = { Profile } />
                     <Route path="/cart" component = { Cart }/>
                     <Private path="/checkout" component = { Payment }/>
-                    <Private path="/test/:courseId/:classId" component = { Test }/>
+                    <Route path="/test/:courseId/:classId" component = { Test }/>
+                    <Route path="/adminLogin" component = { AdminLogin }/>
+                    <Route path="/adminDashboard" component = { AdminDashboard }/>
                     <Route component={()=><p>Error 404</p>} />
                 </Switch>
         </Router>

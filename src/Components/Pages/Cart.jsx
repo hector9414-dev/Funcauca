@@ -74,7 +74,6 @@ const Cart = ({courses, cart, flushcart, loggedUser}) => {
 
     }
     
-
     useEffect(()=>{
         getReference()
     },[loggedUser,cart])
@@ -86,25 +85,24 @@ const Cart = ({courses, cart, flushcart, loggedUser}) => {
                 cart.length > 0?
                 <div className="ed-grid lg-grid-5 ">
                 <div className="cart-items-container lg-cols-3">
-                {
-                    courses.map(element => {
-                        return Object.values(element).map( course =>
-                            cart.map( item => {
-                                if(item===course.id){
-                                    courseSum(course.price)
+                {   
+                
+                            cart.map( id => {
+                                const actualCourse = courses[`course${id}`]
+                                courseSum(actualCourse.price)
                                     return(
                                         <CartCard 
-                                            key={course.id}
-                                            img={course.img}
-                                            title={course.title}
-                                            price={course.price}
-                                            teacher={course.teacher}
-                                            id={course.id}
+                                            key={actualCourse.id}
+                                            img={actualCourse.img}
+                                            title={actualCourse.title}
+                                            price={actualCourse.price}
+                                            teacher={actualCourse.teacher}
+                                            id={actualCourse.id}
                                         />
                                     )
                                 }
-                            }))
-                    })
+                            )
+                
                         
                 }
                 
@@ -154,7 +152,7 @@ const Cart = ({courses, cart, flushcart, loggedUser}) => {
                 }
                 <input name="extra2"    type="hidden"  value={JSON.stringify(cart)} />
                 <input name="buyerEmail"    type="hidden"  value="prueba@test.com" />
-                <input name="responseUrl"    type="hidden"  value="http://localhost:3000/checkout" />
+                <input name="responseUrl"    type="hidden"  value="http://app.funcaucaedu.com/checkout" />
                 <input name="confirmationUrl"    type="hidden"  value="https://us-central1-funcaucaedu-eb0cf.cloudfunctions.net/setPaymentInfo" />
                 </form>
                 <div className="m-mt-4 m-75 s-65 s-to-center">

@@ -2,7 +2,8 @@ import React from 'react'
 import {Card, Button} from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
-const CourseCard = ({img, title, summary, id}) => {
+const CourseCard = ({img, title, summary, id, admin}) => {
+
 
     return (
         <Card className="s-mb-2 card">

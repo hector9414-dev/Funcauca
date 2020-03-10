@@ -23,9 +23,9 @@ const getCourses = () => async dispatch => {
     }
     else{
         const response = await firebase.database().ref("/Courses").once("value")
-        const courseResponse = response.val()
-        localStorage.setItem("courses", JSON.stringify(courseResponse))
-        data = courseResponse
+        
+        localStorage.setItem("courses", JSON.stringify(response.val()))
+        data = response.val()
     }
 
     return dispatch({

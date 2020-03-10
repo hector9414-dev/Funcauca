@@ -6,33 +6,27 @@ import CourseImg from '../../img/courses.jpg'
 
 
 
-const Courses = ({dashboard, home, courses, loggedUser}) => {
+const Courses = ({dashboard, home, courses, loggedUser, admin}) => {
+
 
     if(dashboard){
+        console.log(courses)
         return (
             <main className="ed-grid s-grid-1  lg-grid-3">
                 {   
                     loggedUser.courses && loggedUser.courses[0]!==""?
-                        courses ?
-                        courses.map(e => {
-                            return Object.values(e).map( course =>
-                                loggedUser.courses.map( userCourses =>{
-                                    if( userCourses === course.id ){
-                                        return(
-                                            <CourseCard
-                                            key={course.id}
-                                            id={course.id}
-                                            img={course.img}
-                                            title={course.title}
-                                            summary={""}
-                                        />
+                                loggedUser.courses.map( key =>{
+                                    return(
+                                        <CourseCard
+                                        key={courses[`course${key}`].id}
+                                        id={courses[`course${key}`].id}
+                                        img={courses[`course${key}`].img}
+                                        title={courses[`course${key}`].title}
+                                        summary={`${courses[`course${key}`].summary}` }
+                                    />
                                         )
                                     }
-                                } )
-                            ) 
-                        })
-                        :
-                        <p>cargando</p>
+                                 )
                     :
                     <p>Oops, aun no tienes cursos</p>
                 }
@@ -46,16 +40,16 @@ const Courses = ({dashboard, home, courses, loggedUser}) => {
             <>
                 <div className="ed-grid s-grid-1 m-grid-3 lg-grid-4">
                 {
-                    courses.map(e => {
-                        return Object.values(e).map( course =>
+                    Object.keys(courses).map(key => {
+                        return(
                             <CourseCard
-                                key={course.id}
-                                id={course.id}
-                                img={course.img}
-                                title={course.title}
-                                summary={course.summary}
-                            />
-                        ) 
+                            key={courses[key].id}
+                            id={courses[key].id}
+                            img={courses[key].img}
+                            title={courses[key].title}
+                            summary={`${courses[key].summary}` }
+                        />
+                        )
                     })
                 }
                 </div>
@@ -74,16 +68,16 @@ const Courses = ({dashboard, home, courses, loggedUser}) => {
                 />
             <div className="ed-grid s-grid-1 m-grid-3 lg-grid-4">
             {
-                courses.map(e => {
-                    return Object.values(e).map( course =>
+                Object.keys(courses).map(key => {
+                    return(
                         <CourseCard
-                            key={course.id}
-                            id={course.id}
-                            img={course.img}
-                            title={course.title}
-                            summary={course.summary}
-                        />
-                    ) 
+                        key={courses[key].id}
+                        id={courses[key].id}
+                        img={courses[key].img}
+                        title={courses[key].title}
+                        summary={`${courses[key].summary}` }
+                    />
+                    )
                 })
                 }
             </div>

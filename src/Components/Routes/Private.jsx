@@ -1,10 +1,9 @@
 import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
-import { connect } from 'react-redux'
 
-const Private = ({component: Component,loggedUser, ...rest}) => {
+const Private = ({component: Component, ...rest}) => {
 
-    if(!loggedUser){
+    if(!localStorage.getItem("user")){
         return <Redirect to="/" />
     }
 
@@ -14,11 +13,5 @@ const Private = ({component: Component,loggedUser, ...rest}) => {
 }
 
 
-const mapStateToProps = state => ({
-    loggedUser: state.userReducer.userLogged
-})
 
-
-
-
-export default connect(mapStateToProps, {} )( Private )
+export default ( Private )

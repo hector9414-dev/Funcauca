@@ -29,7 +29,7 @@ const userReducer = (state = userState, {type, data}) =>{
 }
 
 const coursesState = {
-    coursesList : []
+    coursesList : {}
   }
   
   
@@ -38,12 +38,12 @@ const coursesState = {
       if(type === GET_COURSES_LIST ){
 
         if(state.coursesList){
-            state.coursesList = []
+            state.coursesList = {}
         }
 
           return {
               ...state,
-              coursesList: state.coursesList.concat(data)
+              coursesList: data
           }
       }
       return state
