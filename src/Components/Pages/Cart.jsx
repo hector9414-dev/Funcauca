@@ -37,10 +37,8 @@ const Cart = ({courses, cart, flushcart, loggedUser}) => {
     const cartId = []
     const formRef = createRef()
 
-    const apikeytest = "4Vj8eK4rloUd272L48hsrarnUA"
-    const merchantidtest = "508029"
-    // const apikey = "iDkJHSBs9Jc5AKrIaL65DBmsr4"
-    // const merchantid = "838626"
+    const apikey = "iDkJHSBs9Jc5AKrIaL65DBmsr4"
+    const merchantid = "838626"
 
     const submit = e =>{
         if(firebase.auth().currentUser){
@@ -64,7 +62,7 @@ const Cart = ({courses, cart, flushcart, loggedUser}) => {
             const cartToString = cartId.toString()
             let refString = `${loggedUser.uid}-${today.getTime()}-${cartToString}`
                 refString = refString.replace(",","")
-                const hash = `${apikeytest}~${merchantidtest}~${refString}~${sum}~COP`
+                const hash = `${apikey}~${merchantid}~${refString}~${sum}~COP`
                 const sign = md5(hash)
                 setSignature(sign)
                 setReference(refString)
@@ -114,36 +112,16 @@ const Cart = ({courses, cart, flushcart, loggedUser}) => {
                 </section>
                 </div>
                 <div className="lg-cols-2">
-                {/* <form method="post" action="https://checkout.payulatam.com/ppp-web-gateway-payu/">
-                    <input name="merchantId"    type="hidden"  value={merchantidtest}   />      
-                    <input name="accountId"  hidden readOnly value="846073" />
-                    <input name="description" hidden  value="FUNCA"  />
-                    <input name="referenceCode" type="text"  value={reference} />
-                    <input name="amount" hidden readOnly  value={sum}   />
-                    <input name="tax"  hidden readOnly  value="0"  />
-                    <input name="taxReturnBase" hidden readOnly value="0" />
-                    <input name="currency" hidden readOnly value="COP" />
-                    <input name="signature"     type="text"  value={signature}  />
-                    <input name="test"    hidden   readOnly  value="1" />
-                    <input name="buyerEmail"  hidden value="test@test.com" />
-                    <input name="responseUrl"  hidden readOnly value="https://funcaucaedu-eb0cf.firebaseapp.com/cart" />
-                    <input name="confirmationUrl" hidden readOnly value="https://us-central1-funcaucaedu-eb0cf.cloudfunctions.net/setPaymentInfo" />
-                    <input name="Submit"     type="submit"  value="Enviar" />
-                </form> */}
-                
-
-
-                <form method="post" action="https://sandbox.checkout.payulatam.com/ppp-web-gateway-payu/" ref={formRef}>
-                <input name="merchantId"    type="hidden"  value={merchantidtest}   />
-                <input name="accountId"     type="hidden"  value="512321" />
+                <form method="post" action="https://checkout.payulatam.com/ppp-web-gateway-payu/" ref={formRef}>
+                <input name="merchantId"    type="hidden"  value={merchantid}   />
+                <input name="accountId"     type="hidden"  value="846073" />
                 <input name="description"   type="hidden"  value="Test PAYU"  />
                 <input name="referenceCode" type="hidden"  value={reference} />
                 <input name="amount"        type="hidden"  value={sum}   />
-                <input name="tax"           type="hidden"  value="3193"  />
-                <input name="taxReturnBase" type="hidden"  value="16806" />
+                <input name="tax"           type="hidden"  value=""  />
+                <input name="taxReturnBase" type="hidden"  value="" />
                 <input name="currency"      type="hidden"  value="COP" />
                 <input name="signature"     type="hidden"  value={signature}  />
-                <input name="test"          type="hidden"  value="1" />
                 {
                     loggedUser ?
                     <input name="extra1" type="hidden"  value={loggedUser.uid} />

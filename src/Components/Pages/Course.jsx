@@ -13,10 +13,12 @@ const Course = ({match, coursesList, loggedUser, addcoursetocart, cart}) => {
 
     const [courseLocked, setCourseLocked] = useState(true)    
 
-
     const matchedCourse = coursesList[`course${match.params.id}`]
 
+    
+
     const {content} = matchedCourse
+
 
     
 
@@ -147,7 +149,19 @@ const Course = ({match, coursesList, loggedUser, addcoursetocart, cart}) => {
                                                             
                                                         )
                                                     })
-                                            }
+                                                }
+                                                <div className="class-title">
+                                                <Link to={`/test/${matchedCourse.id}/${actualSection.id}`}
+                                                            className="class-link">
+                                                {
+                                                    courseLocked ?
+                                                    <img src={Locked} alt="" width="15px" className="s-mr-1"/>
+                                                    :
+                                                    <img src={Check} alt="" width="15px" className="s-mr-1"/>
+                                                }
+                                                <span className="class-link">Examen</span> 
+                                                </Link>
+                                                </div>
                                        </ListGroup.Item>
                                     </ListGroup>
                                 

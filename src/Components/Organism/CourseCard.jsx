@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {Card, Button} from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import * as firebase from 'firebase/app'
 
 const CourseCard = ({img, title, summary, id, admin}) => {
-
 
     return (
         <Card className="s-mb-2 card">

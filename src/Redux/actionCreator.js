@@ -1,4 +1,4 @@
-import { ADD_LOGGED_USER, REMOVE_LOGGED_USER, GET_COURSES_LIST, ADD_COURSE_TO_CART, REMOVE_COURSE_FROM_CART, FLUSH_CART  } from "./actions"
+import { ADD_LOGGED_USER, REMOVE_LOGGED_USER, GET_COURSES_LIST, ADD_COURSE_TO_CART, REMOVE_COURSE_FROM_CART, FLUSH_CART, ADD_EXAM_RESULTS,FLUSH_EXAM_RESULTS  } from "./actions"
 import * as firebase from "firebase/app"
 import "firebase/database";
 import firebaseConfig from "../Firebase/config";
@@ -23,9 +23,33 @@ const getCourses = () => async dispatch => {
     }
     else{
         const response = await firebase.database().ref("/Courses").once("value")
-        
-        localStorage.setItem("courses", JSON.stringify(response.val()))
-        data = response.val()
+        const courses = response.val()
+
+        if(courses){
+            Object.keys(courses).map(key =>{
+                if(courses[key].content){
+                    Object.keys(courses[key].content).map(keys=>{
+                        const {id,title,classes} = courses[key].content[keys]
+                        courses[key].content[keys] = {
+                            id,
+                            title,
+                            classes
+                        }
+                    })
+                    console.log("a")
+                    localStorage.setItem("courses", JSON.stringify(courses))
+                    data = courses
+                }
+                else{
+                    localStorage.setItem("courses", {})
+                    data = {}
+                }
+            })
+       }
+       else{
+        localStorage.setItem("courses", {})
+        data = {}
+       }
     }
 
     return dispatch({
@@ -78,6 +102,22 @@ const removeCourseFromCart = courseId => dispatch =>{
     
 }
 
+const addExamResults = results => dispatch => {
+
+    localStorage.setItem("results", JSON.stringify(results))
+    const tempResults = JSON.parse(localStorage.getItem("results"))
+
+    return dispatch({
+        type: ADD_EXAM_RESULTS,
+        data: tempResults
+    })
+        
+    }
+
+const flushExamResults = () => ({
+        type: FLUSH_EXAM_RESULTS
+    })
+
 const flushCart = () => dispatch =>{
 
     localStorage.removeItem("cart")
@@ -88,4 +128,4 @@ const flushCart = () => dispatch =>{
 }
 
 
-export { addLoggedUser, removeLoggedUser, getCourses, addCourseToCart, removeCourseFromCart, getLocalCart, flushCart  }
+export { addLoggedUser, removeLoggedUser, getCourses, addCourseToCart, removeCourseFromCart, getLocalCart, flushCart, addExamResults  }

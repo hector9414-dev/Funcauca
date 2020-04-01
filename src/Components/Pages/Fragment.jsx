@@ -1,5 +1,6 @@
 import React from 'react'
 import Vimeo from '@u-wave/react-vimeo';
+import Youtube from '@u-wave/react-youtube'
 import { Accordion, Card } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { NavLink, Link, } from 'react-router-dom'
@@ -75,14 +76,16 @@ const Fragment = ({match, courses}) => {
                                         </li>
                                     )
                                 })
-                                }
-                                < NavLink to={`/test/${matchedCourse.id}/${section.id}`} 
+                                }       
+                                    <li> 
+                                        < NavLink to={`/test/${matchedCourse.id}/${section.id}`} 
                                             className="class-link fragment" 
                                             activeClassName="active"
                                             >
                                             <img src={Whitecheck} alt="" width="15px" className="s-mr-1"/>
                                             <span>Examen</span>
                                         </NavLink>
+                                    </li>
                                 </ul>
                                 </Card.Body>
                                 

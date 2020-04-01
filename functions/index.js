@@ -14,7 +14,7 @@ exports.setPaymentInfo = functions.https.onRequest(async (req, res)=>{
     let new_courses = courseResponse
 
 
-    const apikey = "4Vj8eK4rloUd272L48hsrarnUA"
+    const apikey = "iDkJHSBs9Jc5AKrIaL65DBmsr4"
     const amount = req.body.value
     
     const cart = JSON.parse(req.body.extra2)

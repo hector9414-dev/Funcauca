@@ -2,15 +2,14 @@ import React from 'react'
 import CourseCard from '../Organism/CourseCard'
 import Banner from '../Organism/Banner'
 import { connect } from 'react-redux'
+import * as firebase from 'firebase/app'
 import CourseImg from '../../img/courses.jpg'
 
 
 
-const Courses = ({dashboard, home, courses, loggedUser, admin}) => {
-
+const Courses = ({dashboard, home, courses, loggedUser}) => {
 
     if(dashboard){
-        console.log(courses)
         return (
             <main className="ed-grid s-grid-1  lg-grid-3">
                 {   

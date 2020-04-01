@@ -10,7 +10,7 @@ import Header from './Organism/Header'
 import * as firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/database'
-import { addLoggedUser, getCourses, flushCart } from '../Redux/actionCreator'
+import { addLoggedUser, getCourses, flushCart, getLocalCart } from '../Redux/actionCreator'
 import Dashboard from './Pages/Dashboard'
 import Private from './Routes/Private'
 import Profile from './Pages/Profile'
@@ -21,10 +21,50 @@ import { useEffect } from 'react'
 import Test from './Pages/Test'
 import AdminLogin from './Pages/AdminLogin'
 import AdminDashboard from './Pages/AdminDashboard'
+import Results from './Pages/Results'
+
 
 
 
 const AppRouter = ({addUser, loggedUser, flushcart}) => {
+
+    window.addEventListener("storage",async e=>{
+        const {key} = e
+
+        try {
+            switch(key){
+                case "user":
+                    const user = JSON.parse(localStorage.getItem("user"))
+                    const {uid} = user
+                    const userRef = firebase.database().ref(`/Users/${uid}`)
+                    const dataResponse = await userRef.once("value")
+                    const userInfo = dataResponse.val()
+                    localStorage.setItem("user", JSON.stringify(userInfo))
+                    addUser(userInfo)
+                    break
+                case "courses":
+                    window.location.reload()
+                    window.location.assign("/")
+                    break
+                case "token":
+                    firebase.auth().signOut()
+                    localStorage.removeItem("user")
+                    localStorage.removeItem("token")
+                    window.location.reload()
+                    window.location.assign("/")
+                    break
+                default : 
+                    window.location.reload()
+                    break
+            }
+        } catch (error) {
+            window.location.reload()
+            window.location.assign("/")
+            
+        }
+
+        
+    })
     
         const coursesRef =firebase.database().ref("/Courses")
         coursesRef.once("child_added")
@@ -54,16 +94,18 @@ const AppRouter = ({addUser, loggedUser, flushcart}) => {
             const user = JSON.parse(localStorage.getItem("user"))
             const userRef = firebase.database().ref(`/Users/${user.uid}`)
             const coursesUserRef = firebase.database().ref(`/Users/${user.uid}/courses`)
+
             userRef.once("child_changed")
             .then(snapshot => {
-                console.log("change")
-                userRef.once("value")
+                if(snapshot.key!=="exams"){
+                    userRef.once("value")
                 .then(snapshot => {
                     const userInfo = {...snapshot.val()}
                     localStorage.setItem("user", JSON.stringify(userInfo))
                     addUser(userInfo)
                     window.location.reload()
                 })
+                }
             })
 
             coursesUserRef.once("child_changed")
@@ -87,8 +129,7 @@ const AppRouter = ({addUser, loggedUser, flushcart}) => {
                         const {uid} = user
                         const userRef = firebase.database().ref(`/Users/${uid}`)
                         const dataResponse = await userRef.once("value")
-                        const userInfo = {...dataResponse.val()}
-                        console.log(userInfo)
+                        const userInfo = dataResponse.val()
                         localStorage.setItem("user", JSON.stringify(userInfo))
                         addUser(userInfo)
                     }
@@ -118,7 +159,8 @@ const AppRouter = ({addUser, loggedUser, flushcart}) => {
                     <Private path="/editar-perfil" component = { Profile } />
                     <Route path="/cart" component = { Cart }/>
                     <Private path="/checkout" component = { Payment }/>
-                    <Route path="/test/:courseId/:classId" component = { Test }/>
+                    <Route path="/test/:courseId/:sectionId" component = { Test }/>
+                    <Route path="/results/:courseId/:sectionId" component = { Results }/>
                     <Route path="/adminLogin" component = { AdminLogin }/>
                     <Route path="/adminDashboard" component = { AdminDashboard }/>
                     <Route component={()=><p>Error 404</p>} />

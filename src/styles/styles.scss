@@ -303,11 +303,11 @@ body{
 
 .page-body{
     background-color: #282D31;
-    height: calc(100vh - 4.5rem);
+    height: calc(100vh - 4rem);
 
     &.dashboard{
         background: rgb(248, 248, 248);
-        height: calc(100vh - 19.5rem);
+        height: fit-content;
     }
 
     @media screen and (max-width:1024px) {

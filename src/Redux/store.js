@@ -1,6 +1,6 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { ADD_LOGGED_USER, REMOVE_LOGGED_USER, GET_COURSES_LIST, ADD_COURSE_TO_CART, REMOVE_COURSE_FROM_CART, FLUSH_CART } from './actions'
+import { ADD_LOGGED_USER, REMOVE_LOGGED_USER, GET_COURSES_LIST, ADD_COURSE_TO_CART, REMOVE_COURSE_FROM_CART, FLUSH_CART, ADD_EXAM_RESULTS } from './actions'
 import thunk from 'redux-thunk'
 
 
@@ -34,7 +34,6 @@ const coursesState = {
   
   
   const coursesReducer = (state = coursesState, {type, data}) =>{
-
       if(type === GET_COURSES_LIST ){
 
         if(state.coursesList){
@@ -80,7 +79,8 @@ const coursesState = {
       return state
   }
 
-export default createStore(combineReducers({userReducer, coursesReducer, cartReducer}) , composeWithDevTools( applyMiddleware( thunk ) ))
+
+export default createStore(combineReducers({userReducer, coursesReducer, cartReducer }) , composeWithDevTools( applyMiddleware( thunk ) ))
 
 
 

@@ -172,7 +172,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch =>({
     
-    removeloggeduser(courseId){
+    removeloggeduser(){
         dispatch( removeLoggedUser() )
     },
 
